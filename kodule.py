@@ -14,8 +14,6 @@ class Translation:
         self.natives = []
         self.targets = []
         self.tags = {}
-        # self.versions = {}
-        # self.themes = {}
 
         # secret
         if line[0] == '*':
@@ -30,16 +28,6 @@ class Translation:
         native, target = self.data.split('->')
         self.natives = [x.strip() for x in native.split('|')]
         self.targets = [x.strip() for x in target.split('|')]
-        # for n in self.natives:
-        #     if n not in self.themes:
-        #         self.themes[n] = self.targets
-        #     else:
-        #         self.themes[n].extend(self.targets)
-        # for t in self.targets:
-        #     if t not in self.versions:
-        #         self.versions[t] = self.natives
-        #     else:
-        #         self.versions[t].extend(self.natives)
         
     def __unicode__(self):
         return ('* ' if self.secret else '') + unicode(self.data) + ' #' + unicode(self.tags)
@@ -67,14 +55,6 @@ class Kesson:
             elif line.find('->') != -1:
                 translation = Translation(line)
                 self.translations.append(translation)
-                # tags
-                # for t,v in translation.tags.iteritems():
-                #     if t not in self.translations_by_tag:
-                #         self.translations_by_tag[t] = {}
-                #     for tag_value in v:
-                #         if tag_value not in self.translations_by_tag[t]:
-                #             self.translations_by_tag[t][tag_value] = []
-                #         self.translations_by_tag[t][tag_value].append(translation)
 
 class Kodule:
     def __init__(self, kodules, basepath, fullname):

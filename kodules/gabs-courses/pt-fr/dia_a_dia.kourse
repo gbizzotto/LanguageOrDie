@@ -8,11 +8,12 @@ Francês do dia a dia // The first line is the course's title
 
 ir, aller // the first line of a lesson is its title (users will be shown
 // this title and asked whether they want to check the lesson as already learned)
-ir -> aller #verb #infinitivo
+ir -> aller #verbo #infinitivo
 // At the beginning of a lesson, add lines that start with
 // an interrogation point (?) to teach new material to the student
 // It will be shown once, then every time the user gives up
 // or makes a mistake. The app won't treat those as exercise.
+? ir : aller
 ? eu vou : je vais 
 ? você vai : tu vas
 ? ele vai : il va
@@ -25,15 +26,15 @@ ir -> aller #verb #infinitivo
 // Now let's ask the app to form a pseudo-random sentence
 // with a singular pronoun and a matching conjugation of "ir"
 // eu vou -> je vais, você vai -> tu vas, ele vai -> il|elle va
-@pronome@singular@p=pessoa @ir@conjugacao@pessoa=p -> [1] [2]
+//@pronome@singular@p=pessoa @ir@conjugacao@pessoa=p -> [1] [2]
 
 estar, être
 ? Em francês não há distinção entre ser e estar. Usa-se "être" e o sentido é inferido pelo contexto.
-estar -> être #verb #infinitive
+estar -> être #verbo #infinitive
 
 ser, être
 ? Novamente, em francês não há distinção entre ser e estar. Usa-se "être" e o sentido é inferido pelo contexto.
-ser -> être #verb #infinitive
+ser -> être #verbo #infinitivo
 você vai -> vous allez #formal
 vai -> allez #conjugation #singular #pessoa=2a #ir
 tu -> vous #pronome #singular #pessoa=2a #formal
