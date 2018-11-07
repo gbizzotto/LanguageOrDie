@@ -79,24 +79,3 @@ def study(input, kodule, root_kodule, knowledge_base):
     for x in revise(input, knowledge_base):
         yield output + x
         output = ''
-
-def choose_kourse(input):
-    kodules = kodule.load_all('./kodules')
-    kourses = [k for (n,k) in kodules.iteritems() if k.is_kourse]
-    while(True):
-        i=1
-        output = ''
-        for k in kourses:
-            output = output + str(i)+'. ' + k.title + '\n'
-            i += 1
-        yield output + "Which kourse?"
-        if not input.value.isdigit():
-            continue
-        selected_item = int(input.value) - 1
-        if selected_item < 0 or selected_item >= len(kourses):
-            continue
-        break
-    knowledge_base = kb.KnowledgeBase() # TODO load from file/DB
-    for x in study(input, kourses[selected_item], kourses[selected_item], knowledge_base):
-        yield x
-    yield "You're all set for now. Please come back around " + str(knowledge_base.get_next_revision_time().time())[:5]
