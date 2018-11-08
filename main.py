@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import time
 import requests
@@ -24,6 +25,15 @@ class Session:
     def __init__(self):
         self.generator = self.run()
         self.kbs = {}
+        self.intro = u"Oi! Sou o @DaLanguageBot.\n"\
+            + u"Sou professor. Já posso ministrar alguns cursos.\n"\
+            + u"Nada muito elaborado por enquanto, pois estou apenas em fase de testes.\n"\
+            + u"\n"\
+            + u"Cada curso é dividido em módulos, lições e itens. Cada item será apresendato a você várias vezes, "\
+            + u"a intervalos cada vez maiores, de maneira que consolide o conhecimento aos poucos."\
+            + u"Se escolher um curso de idioma, para cada idem apresentado, responda com a tradução ou desista mandando o caractere '?'\n"\
+            + u"\n"\
+            + u"Boas aulas!\n\n"
 
     def next(self):
         return self.generator.next()
@@ -36,11 +46,11 @@ class Session:
             # choose kourse
             while True:
                 i=1
-                output = ''
+                output = u'Cursos disponíveis:\n\n'
                 for k in kourses:
                     output = output + str(i)+'. ' + k.title + '\n'
                     i += 1
-                yield output + "Which kourse?"
+                yield output + u"\nO que quer estudar? Digite o número do curso."
                 if not input.value.isdigit():
                     continue
                 selected_item = int(input.value) - 1
@@ -48,15 +58,27 @@ class Session:
                     continue
                 break
             # study kourse
+            output = ''
             kourse = kourses[selected_item]
             if kourse.title not in self.kbs:
                 self.kbs[kourse.title] = kb.KnowledgeBase() # TODO load from file/DB
+                yield '\n' \
+                    + kourse.title + ':\n' \
+                    + ' '.join(kourse.initial_material) \
+                    + '\n\n' \
+                    + u'Envie "ok" para começar o curso ou "não" para voltar para a escolha do curso.'
+                if study.normalize_caseless(input.value) != 'ok':
+                    continue
+            else:
+                output += 'Vamos continuar!\n\n'
             for x in study.study(input, kourse, kourse, self.kbs[kourse.title]):
-                yield x
-            yield "You're all set with '"\
-                + kourse.title\
-                + "' for now. Please come back around "\
-                + str( (self.kbs[kourse.title].get_next_revision_time() + datetime.timedelta(seconds=59)).time())[:5]
+                yield output + x
+            yield u"Já viu material o suficiente, chega de '" \
+                + kourse.title \
+                + u"' por enquanto.\n" \
+                + u"Por favor volte às " \
+                + str( (self.kbs[kourse.title].get_next_revision_time() + datetime.timedelta(seconds=59)).time())[:5] \
+                + u" para revisar o que aprendeu até agora e ver coisas novas!"
 
 sessions = {}
 bot = None
@@ -65,18 +87,25 @@ def handle(msg):
     global sessions
     global bot
     global input
-    print msg
+    print(str(datetim.datetime.now()), msg['from']['first_name'], '->', msg['text'])
     content_type, chat_type, chat_id = telepot.glance(msg)
+    output = ''
     if chat_id not in sessions:
         sessions[chat_id] = Session()
+        output = sessions[chat_id].intro
     input.value = msg['text']
-    bot.sendMessage(chat_id, sessions[chat_id].generator.next())
+    output += sessions[chat_id].generator.next()
+    print(str(datetim.datetime.now()), msg['from']['first_name'], '<-', output)
+    bot.sendMessage(chat_id, output)
 
 def console_main():
     global input
     session = Session()
+    output = session.intro
     for x in session.generator:
-        input.value = raw_input(x + ' > ').decode(sys.stdin.encoding)
+        output += x
+        input.value = raw_input(output + ' > ').decode(sys.stdin.encoding)
+        output = ''
 
 def bot_main():
     global bot

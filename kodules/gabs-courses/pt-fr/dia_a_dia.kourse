@@ -5,6 +5,8 @@ Francês do dia a dia // The first line is the course's title
 @gabs-courses/pt-fr/cumprimentar.kodule
 @gabs-courses/pt-fr/pronomes_singulares.kodule
 // use a blank line for a new lesson
+? Este curso de francês para brasileiros vai introduzir palavras, frases e regras de gramática
+? aos poucos. Responda com a tradução. Se não souber, peça ajuda respondendo com um ponto de interrogação.
 
 ir, aller // the first line of a lesson is its title (users will be shown
 // this title and asked whether they want to check the lesson as already learned)

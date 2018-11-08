@@ -58,6 +58,7 @@ class Kesson:
 
 class Kodule:
     def __init__(self, kodules, basepath, fullname):
+        self.initial_material = []
         self.is_kourse = fullname.endswith(kourse_extenstion)
         self.dependencies = []
         self.kessons = []
@@ -76,11 +77,13 @@ class Kodule:
                 line = remove_comments(line).strip()
                 if len(line) == 0:
                     continue
-                if line[0] == '@':
+                if line[0] == '?':
+                    self.initial_material.append(line[1:].strip())
+                elif line[0] == '@':
                     dependency_fullpath = os.path.join(basepath, line[1:].strip())
                     if dependency_fullpath in kodules:
                         if kodules[dependency_fullpath] is None:
-                            print "Circular references between kodules, can't load. Aborting"
+                            print u"Circular references between kodules, can't load. Aborting"
                         else:
                             self.dependencies.append(kodules[dependency_fullpath])
                     else:

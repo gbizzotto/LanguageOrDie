@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import time
 import random
@@ -41,14 +42,14 @@ def revise(input, knowledge_base):
             tries = 0
             hint = ''
             while True:
-                yield hint + '(g for giveup)\n' + question
+                yield hint + u'(? para pedir ajuda)\n' + question
                 tentative = input.value
                 tries += 1
-                if tentative == 'g':
-                    hint = 'Translations: ' + ', '.join(answers) + '\n'
+                if tentative == '?':
+                    hint = u'Traduções: ' + ', '.join(answers) + '\n'
                     continue
                 if normalize_caseless(tentative) not in [normalize_caseless(t) for t in answers]:
-                    hint = 'Wrong answer\n'
+                    hint = u'Resposta errada\n'
                     continue
                 break
         del kbis[0]
@@ -71,10 +72,10 @@ def study(input, kodule, root_kodule, knowledge_base):
         if knowledge_base.has_kesson(kesson):
             continue
         knowledge_base.add_kesson(kesson)
-        output = 'Adding module "' + kodule.title + '", lesson "' + kesson.title + '"\n'
-        output += 'Initial material:\n'
+        output = u'Acrescentando módulo "' + kodule.title + u'", lição "' + kesson.title + '"\n'
+        output += u'Material inicial:\n'
         for im in kesson.initial_material:
-            output += '  ' + im + '\n'
+            output += '    ' + im + '\n'
 
     for x in revise(input, knowledge_base):
         yield output + x
