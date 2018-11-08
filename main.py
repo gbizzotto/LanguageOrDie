@@ -61,14 +61,13 @@ class Session:
             output = ''
             kourse = kourses[selected_item]
             if kourse.title not in self.kbs:
-                self.kbs[kourse.title] = kb.KnowledgeBase() # TODO load from file/DB
-                yield '\n' \
-                    + kourse.title + ':\n' \
+                yield kourse.title + ':\n' \
                     + ' '.join(kourse.initial_material) \
                     + '\n\n' \
                     + u'Envie "ok" para começar o curso ou "não" para voltar para a escolha do curso.'
                 if study.normalize_caseless(input.value) != 'ok':
                     continue
+                self.kbs[kourse.title] = kb.KnowledgeBase() # TODO load from file/DB
             else:
                 output += 'Vamos continuar!\n\n'
             for x in study.study(input, kourse, kourse, self.kbs[kourse.title]):
@@ -87,7 +86,7 @@ def handle(msg):
     global sessions
     global bot
     global input
-    print(str(datetim.datetime.now()), msg['from']['first_name'], '->', msg['text'])
+    print str(datetime.datetime.now()), msg['from']['first_name'], '->', msg['text']
     content_type, chat_type, chat_id = telepot.glance(msg)
     output = ''
     if chat_id not in sessions:
@@ -95,7 +94,7 @@ def handle(msg):
         output = sessions[chat_id].intro
     input.value = msg['text']
     output += sessions[chat_id].generator.next()
-    print(str(datetim.datetime.now()), msg['from']['first_name'], '<-', output)
+    print str(datetime.datetime.now()), msg['from']['first_name'], '<-', output
     bot.sendMessage(chat_id, output)
 
 def console_main():

@@ -42,7 +42,7 @@ def revise(input, knowledge_base):
             tries = 0
             hint = ''
             while True:
-                yield hint + u'(? para pedir ajuda)\n' + question
+                yield hint + u'\n(? para pedir ajuda)\n' + question
                 tentative = input.value
                 tries += 1
                 if tentative == '?':
@@ -58,7 +58,7 @@ def revise(input, knowledge_base):
         else:
             kbi.got_it_right_eventually()
         kbis.add(kbi)
-        # print('See you around', kbi.next_revision_time)
+        # print 'See you around', kbi.next_revision_time
 
 def study(input, kodule, root_kodule, knowledge_base):
     for dep in kodule.dependencies:
