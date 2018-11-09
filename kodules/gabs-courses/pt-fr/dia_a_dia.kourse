@@ -29,7 +29,7 @@ ir -> aller #verbo #infinitivo
 // Now let's ask the app to form a pseudo-random sentence
 // with a singular pronoun and a matching conjugation of "ir"
 // eu vou -> je vais, você vai -> tu vas, ele vai -> il|elle va
-//@pronome@singular@p=pessoa @ir@conjugacao@pessoa=p -> [1] [2]
+//@pronome@singular@p=pessoa @ir@conjugacao@pessoa=p -> [0] [1]
 
 estar, être
 ? Em francês não há distinção entre ser e estar. Usa-se "être" e o sentido é inferido pelo contexto.

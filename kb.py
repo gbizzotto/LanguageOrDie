@@ -10,9 +10,17 @@ import util
 
 class Answers:
     def __init__(self, match_list):
-        self.sequence = [match_list]
+        self.sequence = match_list
     def accept(self, tentative):
-        return util.normalize_caseless(tentative) in [util.normalize_caseless(t) for t in self.sequence[0]]
+        return Answers.match(util.normalize_caseless(tentative), self.sequence)
+    @staticmethod
+    def match(str, sequence):
+        for possibilities in sequence:
+            for possibility in possibilities:
+                if str.startswith(util.normalize_caseless(possibility)):
+                    if Answers.match(str[len(possibility):], sequence[1:]):
+                        return True
+        return len(sequence) == 0
 
 
 class KnowledgeItem:
@@ -54,11 +62,11 @@ class KnowledgeBase:
                         self.knowledge_items_by_tag[t][tag_value] = []
                     self.knowledge_items_by_tag[t][tag_value].append(kbi)
 
-    def answers(self, question):
-        for kbi in self.knowledge_items:
-            if question in kbi.translation.natives:
-                return kbi.translation.targets
-        return []
+    # def answers(self, question):
+    #     for kbi in self.knowledge_items:
+    #         if question in kbi.translation.natives:
+    #             return kbi.translation.targets
+    #     return []
 
     def get_kbis_to_revise(self):
         return self.knowledge_items
@@ -66,7 +74,56 @@ class KnowledgeBase:
     def get_next_revision_time(self):
         return self.knowledge_items[0].next_revision_time
 
+    def get_kbis_by_tags(self, tags):
+        assert(isinstance(tags, list))
+        return [self.knowledge_items_by_tag[k] for k in tags]
+
     def get_question_from_kbi(self, kbi):
-        question = random.choice(kbi.translation.natives)
-        answers = Answers(self.answers(question))
-        return question, answers
+        initial_question = random.choice(kbi.translation.natives)
+        question_str = initial_question
+        question_parts = []
+        answer_matches = []
+        idx = question_str.find('[')
+        while idx != -1:
+            if idx > 0:
+                question_parts.append(question_str[:idx])
+            question_str = question_str[idx+1:]
+            idx = question_str.find(']')
+            if idx == -1:
+                print u"Malformed input, missing ']'. Aborting."
+                print initial_question
+                raise Exception()
+            tags = question_str[:idx]
+            tags = [t.strip() for t in tags.split('@') if len(t) > 0]
+            tags_kbis = self.get_kbis_by_tags(tags)
+            tags_kbi = random.choice(tags_kbis)
+            question_parts.append(random.choice(tags_kbi.translation.natives))
+            answer_matches.append(tags_kbi.translation.targets)
+
+            question_str = question_str[idx+1:]
+            idx = question_str.find('[')
+        if len(question_str) > 0:
+            question_parts.append(question_str)
+
+        initial_answer = random.choice(kbi.translation.targets)
+        answer_str = initial_answer
+        answer_parts = []
+        idx = answer_str.find('[')
+        while idx != -1:
+            if idx > 0:
+                answer_parts.append([answer_str[:idx]])
+            answer_str = answer_str[idx+1:]
+            idx = answer_str.find(']')
+            if idx == -1:
+                print u"Malformed input, missing ']'. Aborting."
+                print initial_answer
+                raise Exception()
+            answer_idx = int(answer_str[:idx])
+            answer_parts.append(answer_matches[answer_idx])
+
+            answer_str = answer_str[idx+1:]
+            idx = answer_str.find('[')
+        if len(answer_str) > 0:
+            answer_parts.append([answer_str])
+
+        return ''.join(question_parts), Answers(answer_parts)

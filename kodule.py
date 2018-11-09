@@ -79,6 +79,7 @@ class Kodule:
                     if dependency_fullpath in kodules:
                         if kodules[dependency_fullpath] is None:
                             print u"Circular references between kodules, can't load. Aborting"
+                            raise Exception()
                         else:
                             self.dependencies.append(kodules[dependency_fullpath])
                     else:
@@ -92,13 +93,13 @@ class Kodule:
                     continue
                 self.kessons.append(Kesson(title, fin))
 
-    def answers(self, question):
-        result = []
-        for dep in self.dependencies:
-            result.extend(dep.answers(question))
-        for k in self.kessons:
-            result.extend(k.answers(question))
-        return result
+    # def answers(self, question):
+    #     result = []
+    #     for dep in self.dependencies:
+    #         result.extend(dep.answers(question))
+    #     for k in self.kessons:
+    #         result.extend(k.answers(question))
+    #     return result
 
 def load_all(basepath):
     kodules = {}
