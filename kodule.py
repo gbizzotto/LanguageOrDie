@@ -9,15 +9,15 @@ def remove_comments(line):
 
 class Translation:
     def __init__(self, line):
-        self.secret = False
+        self.hidden = False
         self.data = ''
         self.natives = []
         self.targets = []
         self.tags = {}
 
-        # secret
+        # hidden
         if line[0] == '*':
-            self.secret = True
+            self.hidden = True
             line = line[1:].strip()
         # tags
         tags = [x.strip() for x in line.split('#')]
@@ -30,7 +30,7 @@ class Translation:
         self.targets = [x.strip() for x in target.split('|')]
         
     def __unicode__(self):
-        return ('* ' if self.secret else '') + unicode(self.data) + ' #' + unicode(self.tags)
+        return ('* ' if self.hidden else '') + unicode(self.data) + ' #' + unicode(self.tags)
         
 
 class Kesson:

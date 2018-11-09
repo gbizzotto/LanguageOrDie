@@ -1,11 +1,23 @@
 
 import datetime
-import kodule
+import random
+
 from sortedcontainers import SortedList
 
-time_interval = datetime.timedelta(minutes=1)
+import kodule
+import util
+
+
+class Answers:
+    def __init__(self, match_list):
+        self.sequence = [match_list]
+    def accept(self, tentative):
+        return util.normalize_caseless(tentative) in [util.normalize_caseless(t) for t in self.sequence[0]]
+
 
 class KnowledgeItem:
+    time_interval = datetime.timedelta(minutes=1)
+
     def __init__(self, translation):
         self.translation = translation
         self.next_revision_time = datetime.datetime.now()
@@ -13,10 +25,10 @@ class KnowledgeItem:
 
     def got_it_right_on_1st_try(self):
         self.times_got_right += 1
-        self.next_revision_time = datetime.datetime.now() + time_interval * (3**self.times_got_right - 1)
+        self.next_revision_time = datetime.datetime.now() + KnowledgeItem.time_interval * (3**self.times_got_right - 1)
 
     def got_it_right_eventually(self):
-        self.next_revision_time = datetime.datetime.now() + time_interval * (3**self.times_got_right - 1)
+        self.next_revision_time = datetime.datetime.now() + KnowledgeItem.time_interval * (3**self.times_got_right - 1)
 
 class KnowledgeBase:
     def __init__(self):
@@ -50,11 +62,11 @@ class KnowledgeBase:
 
     def get_kbis_to_revise(self):
         return self.knowledge_items
-        # now = datetime.datetime.now()
-        # result = [kbi for kbi in self.knowledge_items if kbi.next_revision_time <= now]
-        # result.sort(key=lambda kbi: kbi.next_revision_time)
-        # result.reverse()
-        # return result
 
     def get_next_revision_time(self):
         return self.knowledge_items[0].next_revision_time
+
+    def get_question_from_kbi(self, kbi):
+        question = random.choice(kbi.translation.natives)
+        answers = Answers(self.answers(question))
+        return question, answers

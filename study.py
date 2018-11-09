@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import time
-import random
 import sys
-import unicodedata
 import datetime
-
-from py2casefold import casefold
 
 import kodule
 import kb
-
-def normalize_caseless(text):
-    return unicodedata.normalize("NFKD", casefold(text))
 
 # def print_lesson(l, depth):
 #     print '  '*depth + 'Lesson', l.title, ':'
@@ -36,29 +29,32 @@ def revise(input, knowledge_base):
         return
     while kbis[0].next_revision_time <= datetime.datetime.now():
         kbi = kbis[0]
-        if kbi.translation.secret is False:
-            question = random.choice(kbi.translation.natives)
-            answers = knowledge_base.answers(question)
-            tries = 0
-            hint = ''
-            while True:
-                yield hint + u'\n(? para pedir ajuda)\n' + question
-                tentative = input.value
-                tries += 1
-                if tentative == '?':
-                    hint = u'Traduções: ' + ', '.join(answers) + '\n'
-                    continue
-                if normalize_caseless(tentative) not in [normalize_caseless(t) for t in answers]:
-                    hint = u'Resposta errada\n'
-                    continue
+        if kbi.translation.hidden is True:
+            del kbis[0]
+            kbis.add(kbi)
+            continue
+        question, answers = knowledge_base.get_question_from_kbi(kbi)
+        # random.choice(kbi.translation.natives)
+        # answers = knowledge_base.answers(question)
+        tries = 0
+        hint = ''
+        while True:
+            yield hint + u'\n(? para pedir ajuda)\n' + question
+            tentative = input.value
+            tries += 1
+            if tentative == '?':
+                hint = u'Traduções: ' + ', '.join(answers) + '\n'
+                continue
+            if answers.accept(tentative):
                 break
+            hint = u'Resposta errada\n'
+            continue
         del kbis[0]
         if tries == 1:
             kbi.got_it_right_on_1st_try()
         else:
             kbi.got_it_right_eventually()
         kbis.add(kbi)
-        # print 'See you around', kbi.next_revision_time
 
 def study(input, kodule, root_kodule, knowledge_base):
     for dep in kodule.dependencies:

@@ -4,13 +4,13 @@ import time
 import requests
 import json
 import sys
-import unicodedata
 import datetime
 
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineQueryResultArticle, InputTextMessageContent
 
+import util
 import study
 import kodule
 import kb
@@ -65,7 +65,7 @@ class Session:
                     + ' '.join(kourse.initial_material) \
                     + '\n\n' \
                     + u'Envie "ok" para começar o curso ou "não" para voltar para a escolha do curso.'
-                if study.normalize_caseless(input.value) != 'ok':
+                if util.normalize_caseless(input.value) != 'ok':
                     continue
                 self.kbs[kourse.title] = kb.KnowledgeBase() # TODO load from file/DB
             else:
