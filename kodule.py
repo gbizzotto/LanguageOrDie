@@ -34,15 +34,10 @@ class Translation:
         
 
 class Kesson:
-    def __init__(self, fin):
+    def __init__(self, title, fin):
         self.initial_material = []
         self.translations = []
-        # self.translations_by_tag = {}
-        # title
-        for line in fin:
-            self.title = remove_comments(line).strip()
-            break
-        # contents
+        self.title = title
         for line in fin:
             line = line.strip()
             if len(line) == 0:
@@ -91,7 +86,11 @@ class Kodule:
                         kodules[dependency_fullpath] = Kodule(kodules, basepath, dependency_fullpath)
                         self.dependencies.append(kodules[dependency_fullpath])
             # lessons
-            self.kessons.append(Kesson(fin))
+            for line in fin:
+                title = remove_comments(line).strip()
+                if len(title) == 0:
+                    continue
+                self.kessons.append(Kesson(title, fin))
 
     def answers(self, question):
         result = []

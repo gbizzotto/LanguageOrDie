@@ -82,7 +82,7 @@ class Session:
 sessions = {}
 bot = None
 
-def handle(msg):
+def telegram_bot_handle(msg):
     global sessions
     global bot
     global input
@@ -106,17 +106,16 @@ def console_main():
         input.value = raw_input(output + ' > ').decode(sys.stdin.encoding)
         output = ''
 
-def bot_main():
+def telegram_bot_main():
     global bot
     bot = telepot.Bot(telegrambot.key)
-    # MessageLoop(bot, {'chat': handle}).run_as_thread()
-    MessageLoop(bot, handle).run_as_thread()
+    MessageLoop(bot, telegram_bot_handle).run_as_thread()
     print ('Listening ...')
     while 1:
         time.sleep(10)
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == 'bot':
-        bot_main()
+    if len(sys.argv) > 1 and sys.argv[1] == 'telegram':
+        telegram_bot_main()
     else:
         console_main()

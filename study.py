@@ -76,7 +76,6 @@ def study(input, kodule, root_kodule, knowledge_base):
         output += u'Material inicial:\n'
         for im in kesson.initial_material:
             output += '    ' + im + '\n'
-
-    for x in revise(input, knowledge_base):
-        yield output + x
-        output = ''
+        for x in revise(input, knowledge_base):
+            yield output + x
+            output = ''
