@@ -4,6 +4,11 @@ Test // The first line is the course's title
 ser & estar, être
 ? Não há distinção entre ser e estar em francês. O verbo é 'être'.
 ? A diferença é feita pelo contexto.
+* pera -> poire #fruta
+* morango -> fraise #fruta
+* verde -> verte | vert #cor
+* amarela -> jaune | jaunasse #cor
+[@fruta] [@cor] -> [0] [1]
 // ser -> être #verbo #infinitivo #etre
 // estar -> être #verbo #infinitivo #etre
 // [@verbo] -> [0]
@@ -17,4 +22,4 @@ ser & estar, être
 // Now let's ask the app to form a pseudo-random sentence
 // with a singular pronoun and a matching conjugation of "ir"
 // eu vou -> je vais, você vai -> tu vas, ele vai -> il|elle va
-@pronome@singular@p=pessoa @ir@conjugacao@pessoa=p -> [0] [1]
+[@pronome@singular@p=pessoa] [@ir@conjugacao@pessoa=p] -> [0] [1]

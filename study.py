@@ -24,15 +24,11 @@ import kb
 #         print_lesson(l, depth+1)
 
 def revise(input, knowledge_base):
-    kbis = knowledge_base.get_kbis_to_revise()
+    kbis = [kbi for kbi in knowledge_base.get_kbis_to_revise() if kbi.translation.hidden == False]
     if len(kbis) == 0:
         return
     while kbis[0].next_revision_time <= datetime.datetime.now():
         kbi = kbis[0]
-        if kbi.translation.hidden is True:
-            del kbis[0]
-            kbis.add(kbi)
-            continue
         question, answers = knowledge_base.get_question_from_kbi(kbi)
         # random.choice(kbi.translation.natives)
         # answers = knowledge_base.answers(question)
@@ -43,7 +39,7 @@ def revise(input, knowledge_base):
             tentative = input.value
             tries += 1
             if tentative == '?':
-                hint = u'Traduções: ' + ', '.join(answers) + '\n'
+                hint = u'Traduções: ' + answers.get_possible_solution() + '\n'
                 continue
             if answers.accept(tentative):
                 break
@@ -54,7 +50,7 @@ def revise(input, knowledge_base):
             kbi.got_it_right_on_1st_try()
         else:
             kbi.got_it_right_eventually()
-        kbis.add(kbi)
+        kbis.append(kbi)
 
 def study(input, kodule, root_kodule, knowledge_base):
     for dep in kodule.dependencies:

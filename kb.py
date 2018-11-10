@@ -13,6 +13,7 @@ class Answers:
         self.sequence = match_list
     def accept(self, tentative):
         return Answers.match(util.normalize_caseless(tentative), self.sequence)
+
     @staticmethod
     def match(str, sequence):
         for possibilities in sequence:
@@ -22,6 +23,11 @@ class Answers:
                         return True
         return len(sequence) == 0
 
+    def get_possible_solution(self):
+        result = ''
+        for possibilities in self.sequence:
+            result += random.choice(possibilities)
+        return result
 
 class KnowledgeItem:
     time_interval = datetime.timedelta(minutes=1)
@@ -42,7 +48,7 @@ class KnowledgeBase:
     def __init__(self):
         self.kessons_titles = set()
         self.knowledge_items = SortedList(key=lambda kbi:kbi.next_revision_time)
-        self.knowledge_items_by_tag = {}
+        # self.knowledge_items_by_tag = {}
     
     def has_kesson(self, kesson):
         return kesson.title in self.kessons_titles
@@ -54,19 +60,6 @@ class KnowledgeBase:
         for tr in kesson.translations:
             kbi = KnowledgeItem(tr)
             self.knowledge_items.add(kbi)
-            for t,v in tr.tags.iteritems():
-                if t not in self.knowledge_items_by_tag:
-                    self.knowledge_items_by_tag[t] = {}
-                for tag_value in v:
-                    if tag_value not in self.knowledge_items_by_tag[t]:
-                        self.knowledge_items_by_tag[t][tag_value] = []
-                    self.knowledge_items_by_tag[t][tag_value].append(kbi)
-
-    # def answers(self, question):
-    #     for kbi in self.knowledge_items:
-    #         if question in kbi.translation.natives:
-    #             return kbi.translation.targets
-    #     return []
 
     def get_kbis_to_revise(self):
         return self.knowledge_items
@@ -74,16 +67,37 @@ class KnowledgeBase:
     def get_next_revision_time(self):
         return self.knowledge_items[0].next_revision_time
 
-    def get_kbis_by_tags(self, tags):
-        assert(isinstance(tags, list))
-        result = {}
-        for t in tags:
-            for k,v in self.knowledge_items_by_tag[t].iteritems():
-                if k not in result:
-                    result[k] = []
-                result[k].extend(v)
-        return result
-        # return [self.knowledge_items_by_tag[k] for k in tags]
+    def get_random_kbi_by_tags(self, tags, variables):
+        assert(isinstance(tags, set))
+        assert(isinstance(variables, dict))
+
+        true_tags = {t:[True] for t in tags if t.find('=') == -1}
+        split_tags = [t for t in tags if t.find('=') != -1]
+        value_tags = {}
+        new_variables = {}
+        for t in split_tags:
+            parts = t.split('=')
+            if len(parts) > 2 or len(parts[0]) == 0 or len(parts[1]) == 0:
+                print 'Malformed tag', t
+                raise Exception
+            if parts[1] in variables:
+                value_tags[parts[0]] = variables[parts[1]]
+            else:
+                new_variables[parts[0]] = parts[1]
+
+        candidate_kbis = [kbi for kbi in self.knowledge_items \
+            if true_tags.viewitems() <= kbi.translation.tags.viewitems() \
+            and value_tags.viewitems() <= kbi.translation.tags.viewitems() ]
+        selected_kbi = random.choice(candidate_kbis)
+
+        # set variables
+        for k,v in new_variables.iteritems():
+            if v in selected_kbi.translation.tags:
+                if k not in variables:
+                    variables[k] = []
+                variables[k].extend(selected_kbi.translation.tags[v])
+
+        return selected_kbi
 
     def get_question_from_kbi(self, kbi):
         initial_question = random.choice(kbi.translation.natives)
@@ -91,6 +105,7 @@ class KnowledgeBase:
         question_parts = []
         answer_matches = []
         idx = question_str.find('[')
+        tag_values = {}
         while idx != -1:
             if idx > 0:
                 question_parts.append(question_str[:idx])
@@ -100,12 +115,13 @@ class KnowledgeBase:
                 print u"Malformed input, missing ']'. Aborting."
                 print initial_question
                 raise Exception()
+
             tags = question_str[:idx]
-            tags = [t.strip() for t in tags.split('@') if len(t) > 0]
-            tags_kbis = self.get_kbis_by_tags(tags)
-            tags_kbi = random.choice(tags_kbis[True])
-            question_parts.append(random.choice(tags_kbi.translation.natives))
-            answer_matches.append(tags_kbi.translation.targets)
+            tags = {t.strip() for t in tags.split('@') if len(t.strip()) > 0} # set comprehension
+            selected_kbi = self.get_random_kbi_by_tags(tags, tag_values)
+
+            question_parts.append(random.choice(selected_kbi.translation.natives))
+            answer_matches.append(selected_kbi.translation.targets)
 
             question_str = question_str[idx+1:]
             idx = question_str.find('[')
