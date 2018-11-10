@@ -76,7 +76,14 @@ class KnowledgeBase:
 
     def get_kbis_by_tags(self, tags):
         assert(isinstance(tags, list))
-        return [self.knowledge_items_by_tag[k] for k in tags]
+        result = {}
+        for t in tags:
+            for k,v in self.knowledge_items_by_tag[t].iteritems():
+                if k not in result:
+                    result[k] = []
+                result[k].extend(v)
+        return result
+        # return [self.knowledge_items_by_tag[k] for k in tags]
 
     def get_question_from_kbi(self, kbi):
         initial_question = random.choice(kbi.translation.natives)
@@ -96,7 +103,7 @@ class KnowledgeBase:
             tags = question_str[:idx]
             tags = [t.strip() for t in tags.split('@') if len(t) > 0]
             tags_kbis = self.get_kbis_by_tags(tags)
-            tags_kbi = random.choice(tags_kbis)
+            tags_kbi = random.choice(tags_kbis[True])
             question_parts.append(random.choice(tags_kbi.translation.natives))
             answer_matches.append(tags_kbi.translation.targets)
 
