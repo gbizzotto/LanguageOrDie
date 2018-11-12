@@ -3,6 +3,7 @@
 import time
 import sys
 import datetime
+import random
 
 import kodule
 import kb
@@ -28,7 +29,8 @@ def revise(input, knowledge_base):
     if len(kbis) == 0:
         return
     while kbis[0].next_revision_time <= datetime.datetime.now():
-        kbi = kbis[0]
+        kbi_idx = random.randint(0, min([5, len(kbis)-1]))
+        kbi = kbis[kbi_idx]
         question, answers = knowledge_base.get_question_from_kbi(kbi)
         # random.choice(kbi.translation.natives)
         # answers = knowledge_base.answers(question)
@@ -45,7 +47,7 @@ def revise(input, knowledge_base):
                 break
             hint = u'Resposta errada\n'
             continue
-        del kbis[0]
+        del kbis[kbi_idx]
         if tries == 1:
             kbi.got_it_right_on_1st_try()
         else:
