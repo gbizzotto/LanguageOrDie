@@ -48,7 +48,6 @@ class KnowledgeBase:
     def __init__(self):
         self.kessons_titles = set()
         self.knowledge_items = SortedList(key=lambda kbi:kbi.next_revision_time)
-        # self.knowledge_items_by_tag = {}
     
     def has_kesson(self, kesson):
         return kesson.title in self.kessons_titles

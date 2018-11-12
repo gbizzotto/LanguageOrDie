@@ -4,11 +4,12 @@ Test // The first line is the course's title
 ser & estar, être
 ? Não há distinção entre ser e estar em francês. O verbo é 'être'.
 ? A diferença é feita pelo contexto.
-* pera -> poire #fruta
-* morango -> fraise #fruta
-* verde -> verte | vert #cor
-* amarela -> jaune | jaunasse #cor
-[@fruta] [@cor] -> [0] [1]
+* pera -> poire #fruta #genero=feminino
+* morango -> fraise #fruta #genero=feminino
+* verde -> verte #cor #genero=feminino
+* verde -> vert #cor #genero=masculino
+* amarela -> jaune | jaunasse #cor #genero=feminino #genero=masculino
+[@fruta@g=genero] [@cor@genero=g] -> [0] [1]
 // ser -> être #verbo #infinitivo #etre
 // estar -> être #verbo #infinitivo #etre
 // [@verbo] -> [0]
