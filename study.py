@@ -29,7 +29,10 @@ def revise(input, knowledge_base):
     if len(kbis) == 0:
         return
     while kbis[0].next_revision_time <= datetime.datetime.now():
-        kbi_idx = random.randint(0, min([5, len(kbis)-1]))
+        if len(kbis) < 10:
+            kbi_idx = 0
+        else:
+            kbi_idx = random.randint(0, 5)
         kbi = kbis[kbi_idx]
         question, answers = knowledge_base.get_question_from_kbi(kbi)
         # random.choice(kbi.translation.natives)
@@ -68,8 +71,9 @@ def study(input, kodule, root_kodule, knowledge_base):
         output = u'A próxima lição do módulo "' + kodule.title + u'", é "' + kesson.title + '"\n'\
             + u'Se não quiser estudá-la, digite "pular", senão, digite "ok".'
         yield output
-        if input.value != 'pular':
-            knowledge_base.add_kesson(kesson)
+        hidden = input.value == 'pular'
+        knowledge_base.add_kesson(kesson, hidden)
+        if not hidden:
             if len(kesson.initial_material) > 0:
                 output = u'Material inicial:\n'
                 for im in kesson.initial_material:

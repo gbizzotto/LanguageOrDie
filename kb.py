@@ -1,6 +1,7 @@
 
 import datetime
 import random
+import copy
 
 from sortedcontainers import SortedList
 
@@ -52,12 +53,13 @@ class KnowledgeBase:
     def has_kesson(self, kesson):
         return kesson.title in self.kessons_titles
 
-    def add_kesson(self, kesson):
+    def add_kesson(self, kesson, hidden):
         if kesson.title in self.kessons_titles:
             return
         self.kessons_titles.add(kesson.title)
         for tr in kesson.translations:
-            kbi = KnowledgeItem(tr)
+            kbi = copy.deepcopy(KnowledgeItem(tr))
+            kbi.translation.hidden = kbi.translation.hidden or hidden
             self.knowledge_items.add(kbi)
 
     def get_kbis_to_revise(self):
