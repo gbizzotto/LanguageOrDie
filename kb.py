@@ -1,7 +1,6 @@
 
 import datetime
 import random
-import copy
 
 from sortedcontainers import SortedList
 
@@ -37,6 +36,7 @@ class KnowledgeItem:
         self.translation = translation
         self.next_revision_time = datetime.datetime.now()
         self.times_got_right = 0
+        self.hidden = translation.hidden
 
     def got_it_right_on_1st_try(self):
         self.times_got_right += 1
@@ -49,6 +49,7 @@ class KnowledgeBase:
     def __init__(self):
         self.kessons_titles = set()
         self.knowledge_items = SortedList(key=lambda kbi:kbi.next_revision_time)
+        self.hidden_knowledge_items = []
     
     def has_kesson(self, kesson):
         return kesson.title in self.kessons_titles
@@ -58,9 +59,12 @@ class KnowledgeBase:
             return
         self.kessons_titles.add(kesson.title)
         for tr in kesson.translations:
-            kbi = copy.deepcopy(KnowledgeItem(tr))
-            kbi.translation.hidden = kbi.translation.hidden or hidden
-            self.knowledge_items.add(kbi)
+            kbi = KnowledgeItem(tr)
+            kbi.hidden = kbi.translation.hidden or hidden
+            if kbi.hidden:
+                self.hidden_knowledge_items.append(kbi)
+            else:
+                self.knowledge_items.add(kbi)
 
     def get_kbis_to_revise(self):
         return self.knowledge_items
@@ -86,9 +90,12 @@ class KnowledgeBase:
             else:
                 new_variables[parts[0]] = parts[1]
 
-        candidate_kbis = [kbi for kbi in self.knowledge_items \
+        candidate_kbis = [kbi for kbi in self.hidden_knowledge_items \
             if true_tags.viewitems() <= kbi.translation.tags.viewitems() \
             and value_tags.viewitems() <= kbi.translation.tags.viewitems() ]
+        candidate_kbis.extend([kbi for kbi in self.knowledge_items \
+            if true_tags.viewitems() <= kbi.translation.tags.viewitems() \
+            and value_tags.viewitems() <= kbi.translation.tags.viewitems() ])
         selected_kbi = random.choice(candidate_kbis)
 
         # set variables
