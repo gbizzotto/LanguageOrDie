@@ -65,11 +65,17 @@ def study(input, kodule, root_kodule, knowledge_base):
     for kesson in kodule.kessons:
         if knowledge_base.has_kesson(kesson):
             continue
-        knowledge_base.add_kesson(kesson)
-        output = u'Acrescentando módulo "' + kodule.title + u'", lição "' + kesson.title + '"\n'
-        output += u'Material inicial:\n'
-        for im in kesson.initial_material:
-            output += '    ' + im + '\n'
+        output = u'A próxima lição do módulo "' + kodule.title + u'", é "' + kesson.title + '"\n'\
+            + u'Se não quiser estudá-la, digite "pular", senão, digite "ok".'
+        yield output
+        if input.value != 'pular':
+            knowledge_base.add_kesson(kesson)
+            if len(kesson.initial_material) > 0:
+                output = u'Material inicial:\n'
+                for im in kesson.initial_material:
+                    output += '    ' + im + '\n'
+            else:
+                output = 'Não há material inicial.'
         for x in revise(input, knowledge_base):
             yield output + x
             output = ''

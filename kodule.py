@@ -1,3 +1,5 @@
+#coding: utf8
+ 
 import os
 import io
 
@@ -93,19 +95,10 @@ class Kodule:
                     continue
                 self.kessons.append(Kesson(title, fin))
 
-    # def answers(self, question):
-    #     result = []
-    #     for dep in self.dependencies:
-    #         result.extend(dep.answers(question))
-    #     for k in self.kessons:
-    #         result.extend(k.answers(question))
-    #     return result
-
 def load_all(basepath):
     kodules = {}
     for (dirpath, dirnames, filenames) in os.walk(basepath):
         for f in filenames:
-            f = unicode(f)
             if not f.endswith(kourse_extenstion) and not f.endswith(kodule_extenstion):
                 continue
             fullname = os.path.join(dirpath, f)
