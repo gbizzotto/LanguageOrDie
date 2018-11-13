@@ -1,0 +1,18 @@
+Pessoas
+? Sujeitos para construir frases
+
+Sujeitos
+? Pessoa(s) (人), homem (), mulher (), menino (), menina  ()
+Pessoa | Pessoas -> 人
+Homen  -> 男人 #pessoa #singular
+Mulher -> 女人 #pessoa #singular
+Menino -> 男孩 #pessoa #singular
+Menina -> 女孩 #pessoa #singular
+
+Plural
+? Para o plural, acrescentar '们'
+Pessoas  -> 人们   #pessoa #plural
+Homens   -> 男人们 #pessoa #plural
+Mulheres -> 女人们 #pessoa #plural
+Meninos  -> 男孩们 #pessoa #plural
+Meninas  -> 女孩们 #pessoa #plural

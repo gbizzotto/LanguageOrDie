@@ -1,0 +1,23 @@
+Ser e estar
+@gabs-courses/pt-zh/pronomes.kodule
+
+Ser e estar
+? O chinês também tem verbos específicos para faza a distinção entre
+? o estado das coisas (ser, 是) e as atividades (estar, 在).
+? Não há conjugação em mandarin. Não há acordo de verbos com tempo e sujeito.
+ser   -> 是
+estar -> 在
+* sou   -> 是 #verbo #ser #pluralidade=singular #pessoa=1a
+* é     -> 是 #verbo #ser #pluralidade=singular #pessoa=2a
+* é     -> 是 #verbo #ser #pluralidade=singular #pessoa=3a
+* somos -> 是 #verbo #ser #pluralidade=plural   #pessoa=1a
+* são   -> 是 #verbo #ser #pluralidade=plural   #pessoa=2a
+* são   -> 是 #verbo #ser #pluralidade=plural   #pessoa=3a
+* estou   -> 在 #verbo #estar #pluralidade=singular #pessoa=1a
+* está    -> 在 #verbo #estar #pluralidade=singular #pessoa=2a
+* está    -> 在 #verbo #estar #pluralidade=singular #pessoa=3a
+* estamos -> 在 #verbo #estar #pluralidade=plural   #pessoa=1a
+* estão   -> 在 #verbo #estar #pluralidade=plural   #pessoa=2a
+* estão   -> 在 #verbo #estar #pluralidade=plural   #pessoa=3a
+[@pronome@pl=pluralidade@pe=pessoa] [@verbo@ser  @pluralidade=pl@pessoa=pe] -> [0][1]
+[@pronome@pl=pluralidade@pe=pessoa] [@verbo@estar@pluralidade=pl@pessoa=pe] -> [0][1]

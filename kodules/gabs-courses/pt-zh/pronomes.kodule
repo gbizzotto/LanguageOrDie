@@ -1,16 +1,17 @@
 Pronomes
+? Sujeitos para construir frases
 
 Singular
 ? eu (我), você (你), ele (他), ela (她)
-eu -> 我    #pronome #singular
-você -> 你  #pronome #singular #informal
-ele -> 他   #pronome #singular
-ela -> 她   #pronome #singular
+eu   -> 我   #pronome #pluralidade=singular #pessoa=1a
+você -> 你   #pronome #pluralidade=singular #pessoa=2a #informal
+ele  -> 他   #pronome #pluralidade=singular #pessoa=3a
+ela  -> 她   #pronome #pluralidade=singular #pessoa=3a
 
 Plural
-? Para construir um pronome plura,
-? basta acrescentar '們' ao pronome singular
-nós ->   我們   #pronome #plural
-vocês -> 你們   #pronome #plural #informal
-eles ->  他們   #pronome #plural
-elas ->  她們   #pronome #plural
+? Para construir um pronome plural,
+? basta acrescentar '们' ao pronome singular
+nós ->   我们   #pronome #pluralidade=plural #pessoa=1a
+vocês -> 你们   #pronome #pluralidade=plural #pessoa=2a #informal
+eles ->  他们   #pronome #pluralidade=plural #pessoa=3a
+elas ->  她们   #pronome #pluralidade=plural #pessoa=3a
