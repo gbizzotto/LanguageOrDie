@@ -5,24 +5,9 @@ import sys
 import datetime
 import random
 
+import util
 import kodule
 import kb
-
-# def print_lesson(l, depth):
-#     print '  '*depth + 'Lesson', l.title, ':'
-#     for m in l.initial_material:
-#         print '  '*(depth+1) + 'Material:', m
-#     for tr in l.translations:
-#         print '  '*(depth+1) + 'Tr: ', unicode(tr)
-#     for t,tr in l.translations_by_tag.iteritems():
-#         print '  '*(depth+1) +'Tag:', t, tr
-
-# def print_kodule(k, depth):
-#     print '  '*depth + ('Course' if k.is_kourse else 'Module'), k.title, ':'
-#     for d in k.dependencies:
-#         print_kodule(d, depth+1)
-#     for l in k.kessons:
-#         print_lesson(l, depth+1)
 
 def revise(input, knowledge_base):
     kbis = knowledge_base.get_kbis_to_revise()
@@ -35,8 +20,6 @@ def revise(input, knowledge_base):
             kbi_idx = random.randint(0, 5)
         kbi = kbis[kbi_idx]
         question, answers = knowledge_base.get_question_from_kbi(kbi)
-        # random.choice(kbi.translation.natives)
-        # answers = knowledge_base.answers(question)
         tries = 0
         hint = ''
         while True:
@@ -44,7 +27,8 @@ def revise(input, knowledge_base):
             tentative = input.value
             tries += 1
             if tentative == '?':
-                hint = u'Traduções: ' + answers.get_possible_solution() + '\n'
+                hint = u'Tradução possível: ' + answers.get_possible_solution() + '\n'\
+                    + u'(! para sair do curso)\n'
                 continue
             if answers.accept(tentative):
                 break
@@ -61,9 +45,13 @@ def study(input, kodule, root_kodule, knowledge_base):
     for dep in kodule.dependencies:
         for x in study(input, dep, root_kodule, knowledge_base):
             yield x
+            if input.value == '!':
+                return
 
     for x in revise(input, knowledge_base):
         yield x
+        if input.value == '!':
+            return
 
     for kesson in kodule.kessons:
         if knowledge_base.has_kesson(kesson):
@@ -71,7 +59,7 @@ def study(input, kodule, root_kodule, knowledge_base):
         output = u'A próxima lição do módulo "' + kodule.title + u'", é "' + kesson.title + '"\n'\
             + u'Se não quiser estudá-la, digite "pular", senão, digite "ok".'
         yield output
-        hidden = input.value == 'pular'
+        hidden = util.normalize_caseless(input.value) == 'pular'
         knowledge_base.add_kesson(kesson, hidden)
         if not hidden:
             if len(kesson.initial_material) > 0:
@@ -82,4 +70,6 @@ def study(input, kodule, root_kodule, knowledge_base):
                 output = 'Não há material inicial.'
         for x in revise(input, knowledge_base):
             yield output + x
+            if input.value == '!':
+                return
             output = ''
