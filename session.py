@@ -36,7 +36,7 @@ class Session:
 
     def touch(self):
         self.dirty = True
-        self.persist = datetime.datetime.now() + datetime.timedelta(seconds=5)
+        self.persist = datetime.datetime.now() + datetime.timedelta(minutes=2)
 
     def serialize(self):
         return {k:v.serialize() for k,v in self.kbs.iteritems()}

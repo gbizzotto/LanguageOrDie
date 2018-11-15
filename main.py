@@ -48,7 +48,7 @@ def telegram_bot_main():
     MessageLoop(bot, telegram_bot_handle).run_as_thread()
     print ('Listening ...')
     while 1:
-        time.sleep(1)
+        time.sleep(10)
         for id,sess in session.sessions.iteritems():
             sess.lock.acquire()
             try:
