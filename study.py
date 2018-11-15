@@ -13,11 +13,15 @@ def revise(input, knowledge_base):
     kbis = knowledge_base.get_kbis_to_revise()
     if len(kbis) == 0:
         return
-    while kbis[0].next_revision_time <= datetime.datetime.now():
-        if len(kbis) < 10:
+    now = datetime.datetime.now()
+    while kbis[0].next_revision_time <= now:
+        kbs_past_time_count = 0
+        while kbs_past_time_count<10 and kbs_past_time_count < len(kbis) and kbis[kbs_past_time_count].next_revision_time <= now:
+            kbs_past_time_count += 1
+        if kbs_past_time_count < 10:
             kbi_idx = 0
         else:
-            kbi_idx = random.randint(0, 5)
+            kbi_idx = random.randint(0, kbs_past_time_count-1)
         kbi = kbis[kbi_idx]
         question, answers = knowledge_base.get_question_from_kbi(kbi)
         tries = 0
@@ -36,14 +40,15 @@ def revise(input, knowledge_base):
             continue
         del kbis[kbi_idx]
         if tries == 1:
-            kbi.got_it_right_on_1st_try()
+            kbi.consolidate(1)
         else:
-            kbi.got_it_right_eventually()
+            kbi.consolidate(0)
         kbis.add(kbi)
 
-def study(input, kodule, root_kodule, knowledge_base):
+def study(input, full_base_title, kodule, knowledge_base):
+    full_kodule_title = full_base_title + (' > ' if len(full_base_title) > 0 else '') + kodule.title
     for dep in kodule.dependencies:
-        for x in study(input, dep, root_kodule, knowledge_base):
+        for x in study(input, full_kodule_title, dep, knowledge_base):
             yield x
             if input.value == '!':
                 return
@@ -54,14 +59,15 @@ def study(input, kodule, root_kodule, knowledge_base):
             return
 
     for kesson in kodule.kessons:
-        if knowledge_base.has_kesson(kesson):
+        full_kesson_title = full_kodule_title + ' > ' + kesson.title
+        if knowledge_base.has_kesson(full_kesson_title):
             continue
         output = u'A próxima lição do módulo "' + kodule.title + u'", é "' + kesson.title + '"\n'\
             + u'Se não quiser estudá-la, digite "pular", senão, digite "ok".'
         yield output
-        hidden = util.normalize_caseless(input.value) == 'pular'
-        knowledge_base.add_kesson(kesson, hidden)
-        if not hidden:
+        skip = util.normalize_caseless(input.value) == 'pular'
+        knowledge_base.add_kesson(kesson, full_kesson_title, skip)
+        if not skip:
             if len(kesson.initial_material) > 0:
                 output = u'Material inicial:\n'
                 for im in kesson.initial_material:

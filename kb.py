@@ -38,11 +38,17 @@ class KnowledgeItem:
         self.times_got_right = 0
         self.hidden = translation.hidden
 
-    def got_it_right_on_1st_try(self):
-        self.times_got_right += 1
-        self.next_revision_time = datetime.datetime.now() + KnowledgeItem.time_interval * (3**self.times_got_right - 1)
+    def serialize(self):
+        return {u'translation': self.translation.serialize(), \
+            u'next_revision_time': datetime.datetime.strftime(self.next_revision_time, "%Y-%m-%d %H:%M:%S"), \
+            u'times_got_right': self.times_got_right}
 
-    def got_it_right_eventually(self):
+    def deserialize(self, j):
+        self.next_revision_time = d = datetime.datetime.strptime(j['next_revision_time'], "%Y-%m-%d %H:%M:%S")
+        self.times_got_right = j['times_got_right']
+
+    def consolidate(self, step_count):
+        self.times_got_right += step_count
         self.next_revision_time = datetime.datetime.now() + KnowledgeItem.time_interval * (3**self.times_got_right - 1)
 
 class KnowledgeBase:
@@ -51,19 +57,61 @@ class KnowledgeBase:
         self.knowledge_items = SortedList(key=lambda kbi:kbi.next_revision_time)
         self.hidden_knowledge_items = []
     
-    def has_kesson(self, kesson):
-        return kesson.title in self.kessons_titles
+    def serialize(self):
+        return {u'kessons_titles': [t for t in self.kessons_titles], u'knowledge_items': [kbi.serialize() for kbi in self.knowledge_items]}
+    
+    def deserialize(self, j, kourse_title):
+        self.kessons_titles = j['kessons_titles']
 
-    def add_kesson(self, kesson, hidden):
-        if kesson.title in self.kessons_titles:
+        base_kodule = kodule.all_kourses_by_title[kourse_title]
+        if base_kodule is None:
+            print "Error finding kourse from path."
+            raise Exception
+        all_kbis_by_translation_data = {}
+        for kesson_title in self.kessons_titles:
+            current_kodule = base_kodule
+            kesson_path = [k.strip() for k in kesson_title.split('>')][1:]
+            for path_item in kesson_path[:-1]:
+                current_kodule = current_kodule.get_subkodule(path_item)
+                if current_kodule is None:
+                    print "Error finding kesson from path."
+                    raise Exception
+            kesson = current_kodule.get_kesson(kesson_path[-1])
+            if kesson is None:
+                print "Error finding kesson from name."
+                raise Exception
+            for tr in kesson.translations:
+                kbi = KnowledgeItem(tr)
+                if kbi.hidden:
+                    self.hidden_knowledge_items.append(kbi)
+                else:
+                    all_kbis_by_translation_data[kbi.translation.data] = kbi
+            
+        for j_kbi in j['knowledge_items']:
+            if j_kbi['translation'] in all_kbis_by_translation_data:
+                kbi = all_kbis_by_translation_data[j_kbi['translation']]
+                try:
+                    kbi.deserialize(j_kbi)
+                except Exception, e:
+                    ok = 1
+                self.knowledge_items.add(kbi)
+
+        return self
+
+    def has_kesson(self, full_kesson_title):
+        return full_kesson_title in self.kessons_titles
+
+    def add_kesson(self, kesson, full_kesson_title, skip):
+        if full_kesson_title in self.kessons_titles:
             return
-        self.kessons_titles.add(kesson.title)
+        self.kessons_titles.add(full_kesson_title)
         for tr in kesson.translations:
             kbi = KnowledgeItem(tr)
-            kbi.hidden = kbi.translation.hidden or hidden
             if kbi.hidden:
                 self.hidden_knowledge_items.append(kbi)
             else:
+                if skip:
+                    kbi.consolidate(10)
                 self.knowledge_items.add(kbi)
 
     def get_kbis_to_revise(self):

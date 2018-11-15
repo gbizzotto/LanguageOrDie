@@ -12,7 +12,7 @@ def remove_comments(line):
 class Translation:
     def __init__(self, line):
         self.hidden = False
-        self.data = ''
+        self.data = u''
         self.natives = []
         self.targets = []
         self.tags = {}
@@ -30,10 +30,9 @@ class Translation:
         native, target = self.data.split('->')
         self.natives = [x.strip() for x in native.split('|')]
         self.targets = [x.strip() for x in target.split('|')]
-        
-    def __unicode__(self):
-        return ('* ' if self.hidden else '') + unicode(self.data) + ' #' + unicode(self.tags)
-        
+    
+    def serialize(self):
+        return self.data        
 
 class Kesson:
     def __init__(self, title, fin):
@@ -95,6 +94,18 @@ class Kodule:
                     continue
                 self.kessons.append(Kesson(title, fin))
 
+    def get_subkodule(self, title):
+        for d in self.dependencies:
+            if d.title == title:
+                return d
+        return None
+    
+    def get_kesson(self, title):
+        for k in self.kessons:
+            if k.title == title:
+                return k
+        return None
+
 def load_all(basepath):
     kodules = {}
     for (dirpath, dirnames, filenames) in os.walk(basepath):
@@ -106,3 +117,7 @@ def load_all(basepath):
                 kodules[fullname] = None # mark as loading
                 kodules[fullname] = Kodule(kodules, basepath, fullname)
     return kodules
+
+all_kodules = load_all('./kodules')
+all_kourses = [k for (n,k) in all_kodules.iteritems() if k.is_kourse]
+all_kourses_by_title = {k.title:k for k in all_kourses}

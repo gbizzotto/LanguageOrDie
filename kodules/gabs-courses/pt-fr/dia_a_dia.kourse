@@ -24,12 +24,12 @@ ir -> aller #verbo #infinitivo
 // put an asterisk (*) at the beginning of the line
 // for the app not to ask the student to translate something
 * vou -> vais #conjugacao #singular #pessoa=1a #ir
-* vai -> vas #conjugacao #singular #pessoa=2a #ir
-* vai -> va #conjugacao #singular #pessoa=3a #ir
+* vai -> vas  #conjugacao #singular #pessoa=2a #ir
+* vai -> va   #conjugacao #singular #pessoa=3a #ir
 // Now let's ask the app to form a pseudo-random sentence
 // with a singular pronoun and a matching conjugation of "ir"
 // eu vou -> je vais, você vai -> tu vas, ele vai -> il|elle va
-//@pronome@singular@p=pessoa @ir@conjugacao@pessoa=p -> [0] [1]
+[@pronome@singular@p=pessoa] [@ir@conjugacao@pessoa=p] -> [0] [1]
 
 estar, être
 ? Em francês não há distinção entre ser e estar. Usa-se "être" e o sentido é inferido pelo contexto.
