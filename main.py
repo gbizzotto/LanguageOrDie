@@ -3,6 +3,8 @@
 import time
 import sys
 import datetime
+import locale
+locale.setlocale(locale.LC_TIME, "pt_BR.utf8")
 
 import telepot
 from telepot.loop import MessageLoop
@@ -41,7 +43,7 @@ def console_main():
         session.input.value = raw_input(output + ' > ').decode(sys.stdin.encoding)
         output = ''
 
-def telegram_bot_main():
+def telegram_bot_main():    
     global bot
     session.deserialize('telegram-')
     bot = telepot.Bot(telegrambot.key)

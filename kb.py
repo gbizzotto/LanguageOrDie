@@ -34,27 +34,27 @@ class KnowledgeItem:
 
     def __init__(self, translation):
         self.translation = translation
-        self.next_revision_time = datetime.datetime.now()
+        self.next_revision_datetime = datetime.datetime.now()
         self.times_got_right = 0
         self.hidden = translation.hidden
 
     def serialize(self):
         return {u'translation': self.translation.serialize(), \
-            u'next_revision_time': datetime.datetime.strftime(self.next_revision_time, "%Y-%m-%d %H:%M:%S"), \
+            u'next_revision_datetime': datetime.datetime.strftime(self.next_revision_datetime, "%Y-%m-%d %H:%M:%S"), \
             u'times_got_right': self.times_got_right}
 
     def deserialize(self, j):
-        self.next_revision_time = d = datetime.datetime.strptime(j['next_revision_time'], "%Y-%m-%d %H:%M:%S")
+        self.next_revision_datetime = d = datetime.datetime.strptime(j['next_revision_datetime'], "%Y-%m-%d %H:%M:%S")
         self.times_got_right = j['times_got_right']
 
     def consolidate(self, step_count):
         self.times_got_right += step_count
-        self.next_revision_time = datetime.datetime.now() + KnowledgeItem.time_interval * (3**self.times_got_right - 1)
+        self.next_revision_datetime = datetime.datetime.now() + KnowledgeItem.time_interval * (3**self.times_got_right - 1)
 
 class KnowledgeBase:
     def __init__(self):
-        self.kessons_titles = set()
-        self.knowledge_items = SortedList(key=lambda kbi:kbi.next_revision_time)
+        self.kessons_pathnames = set()
+        self.knowledge_items = SortedList(key=lambda kbi:kbi.next_revision_datetime)
         self.hidden_knowledge_items = []
     
     def serialize(self):
@@ -98,13 +98,13 @@ class KnowledgeBase:
 
         return self
 
-    def has_kesson(self, full_kesson_title):
-        return full_kesson_title in self.kessons_titles
+    def has_kesson(self, pathname):
+        return pathname in self.kessons_pathnames
 
-    def add_kesson(self, kesson, full_kesson_title, skip):
-        if full_kesson_title in self.kessons_titles:
+    def add_kesson(self, kesson, pathname, skip):
+        if pathname in self.kessons_pathnames:
             return
-        self.kessons_titles.add(full_kesson_title)
+        self.kessons_pathnames.add(pathname)
         for tr in kesson.translations:
             kbi = KnowledgeItem(tr)
             if kbi.hidden:
@@ -117,8 +117,8 @@ class KnowledgeBase:
     def get_kbis_to_revise(self):
         return self.knowledge_items
 
-    def get_next_revision_time(self):
-        return self.knowledge_items[0].next_revision_time
+    def get_next_revision_datetime(self):
+        return self.knowledge_items[0].next_revision_datetime
 
     def get_random_kbi_by_tags(self, tags, variables):
         assert(isinstance(tags, set))

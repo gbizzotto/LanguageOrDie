@@ -58,6 +58,7 @@ class Kodule:
         self.is_kourse = fullname.endswith(kourse_extenstion)
         self.dependencies = []
         self.kessons = []
+        self.pathname = fullname
         # contents
         with io.open(fullname, mode="r", encoding="utf-8") as fin:
             # title
@@ -109,6 +110,7 @@ class Kodule:
 def load_all(basepath):
     kodules = {}
     for (dirpath, dirnames, filenames) in os.walk(basepath):
+        print dirpath, dirnames, filenames
         for f in filenames:
             if not f.endswith(kourse_extenstion) and not f.endswith(kodule_extenstion):
                 continue

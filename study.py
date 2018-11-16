@@ -14,9 +14,9 @@ def revise(input, knowledge_base):
     if len(kbis) == 0:
         return
     now = datetime.datetime.now()
-    while kbis[0].next_revision_time <= now:
+    while kbis[0].next_revision_datetime <= now:
         kbs_past_time_count = 0
-        while kbs_past_time_count<10 and kbs_past_time_count < len(kbis) and kbis[kbs_past_time_count].next_revision_time <= now:
+        while kbs_past_time_count<10 and kbs_past_time_count < len(kbis) and kbis[kbs_past_time_count].next_revision_datetime <= now:
             kbs_past_time_count += 1
         if kbs_past_time_count < 10:
             kbi_idx = 0
@@ -45,10 +45,9 @@ def revise(input, knowledge_base):
             kbi.consolidate(0)
         kbis.add(kbi)
 
-def study(input, full_base_title, kodule, knowledge_base):
-    full_kodule_title = full_base_title + (' > ' if len(full_base_title) > 0 else '') + kodule.title
+def study(input, kodule, knowledge_base):
     for dep in kodule.dependencies:
-        for x in study(input, full_kodule_title, dep, knowledge_base):
+        for x in study(input, dep, knowledge_base):
             yield x
             if input.value == '!':
                 return
@@ -59,14 +58,14 @@ def study(input, full_base_title, kodule, knowledge_base):
             return
 
     for kesson in kodule.kessons:
-        full_kesson_title = full_kodule_title + ' > ' + kesson.title
-        if knowledge_base.has_kesson(full_kesson_title):
+        kesson_pathname = kodule.pathname + '/' + kesson.title
+        if knowledge_base.has_kesson(kesson_pathname):
             continue
         output = u'A próxima lição do módulo "' + kodule.title + u'", é "' + kesson.title + '"\n'\
             + u'Se não quiser estudá-la, digite "pular", senão, digite "ok".'
         yield output
         skip = util.normalize_caseless(input.value) == 'pular'
-        knowledge_base.add_kesson(kesson, full_kesson_title, skip)
+        knowledge_base.add_kesson(kesson, kesson_pathname, skip)
         if not skip:
             if len(kesson.initial_material) > 0:
                 output = u'Material inicial:\n'

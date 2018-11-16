@@ -79,13 +79,24 @@ class Session:
                 self.kbs[kourse.title] = kb.KnowledgeBase() # TODO load from file/DB
             else:
                 output += 'Vamos continuar!\n\n'
-            for x in study.study(input, '', kourse, self.kbs[kourse.title]):
+            for x in study.study(input, kourse, self.kbs[kourse.title]):
                 yield output + x
+
+            now = datetime.datetime.now()
+            be_back_datetime = self.kbs[kourse.title].get_next_revision_datetime() + datetime.timedelta(seconds=59)
+            if be_back_datetime >= now + datetime.timedelta(days=7):
+                be_back_str = u'em ' + unicode(be_back_datetime.date())
+            elif be_back_datetime.day == (now + datetime.timedelta(days=1)).day:
+                be_back_str = unicode(datetime.datetime.strftime(be_back_datetime, "%A")) + u' às ' + unicode(be_back_datetime.time())[:5]
+            else:
+                be_back_str = unicode(datetime.datetime.strftime(be_back_datetime, "%A")) + u' às ' + unicode(be_back_datetime.time())[:5]
+                be_back_str = u'às ' + unicode(be_back_datetime.time())[:5]
+
             yield u"Já viu material o suficiente, chega de '" \
                 + kourse.title \
                 + u"' por enquanto.\n" \
-                + u"Por favor volte às " \
-                + str( (self.kbs[kourse.title].get_next_revision_time() + datetime.timedelta(seconds=59)).time())[:5] \
+                + u"Por favor volte " \
+                + be_back_str \
                 + u" para revisar o que aprendeu até agora e ver coisas novas!"
 
 
