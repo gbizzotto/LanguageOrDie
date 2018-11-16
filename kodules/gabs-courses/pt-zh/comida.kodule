@@ -1,4 +1,4 @@
-Alimentação
+Alimentação 1
 ? Comer e beber!
 @gabs-courses/pt-zh/ser-estar.kodule
 
@@ -9,13 +9,13 @@ Comer
 ? Maçã: 苹果
 ? Melancia: 西瓜
 comer    -> 吃   #verbo #infinitivo
-fruta    -> 水果  #fruta
-pera     -> 梨    #fruta
-maçã     -> 苹果  #fruta
-melancia -> 西瓜  #fruta
-[@pronome@pl=pluralidade@pe=pessoa] [@verbo@estar@pluralidade=pl@pessoa=pe] comendo [@fruta] -> [0][1]吃[2]
+fruta    -> 水果  #fruta #comida
+pera     -> 梨    #fruta #comida
+maçã     -> 苹果  #fruta #comida
+melancia -> 西瓜  #fruta #comida
+[@pronome@pl=pluralidade@pe=pessoa] [@verbo@estar@pluralidade=pl@pessoa=pe] comendo [@comida] -> [0][1]吃[2]
 
-Ceber
+Beber
 ? Beber: 喝
 ? water: 水
 ? café: 咖啡
@@ -26,4 +26,4 @@ water: 水            #bebida
 café: 咖啡           #bebida
 suco de fruta: 果汁  #bebida
 chá: 茶              #bebida
-[@pronome@pl=pluralidade@pe=pessoa] [@verbo@estar@pluralidade=pl@pessoa=pe] bebendo [@fruta] -> [0][1]喝[2]
+[@pronome@pl=pluralidade@pe=pessoa] [@verbo@estar@pluralidade=pl@pessoa=pe] bebendo [@bebida] -> [0][1]喝[2]

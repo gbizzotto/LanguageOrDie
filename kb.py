@@ -1,6 +1,7 @@
 
 import datetime
 import random
+import os
 
 from sortedcontainers import SortedList
 
@@ -58,25 +59,17 @@ class KnowledgeBase:
         self.hidden_knowledge_items = []
     
     def serialize(self):
-        return {u'kessons_titles': [t for t in self.kessons_titles], u'knowledge_items': [kbi.serialize() for kbi in self.knowledge_items]}
+        return {u'kessons_pathnames': [t for t in self.kessons_pathnames], u'knowledge_items': [kbi.serialize() for kbi in self.knowledge_items]}
     
-    def deserialize(self, j, kourse_title):
-        self.kessons_titles = j['kessons_titles']
+    def deserialize(self, j, kourse_pathname):
+        self.kessons_pathnames = j['kessons_pathnames']
 
-        base_kodule = kodule.all_kourses_by_title[kourse_title]
-        if base_kodule is None:
-            print "Error finding kourse from path."
-            raise Exception
         all_kbis_by_translation_data = {}
-        for kesson_title in self.kessons_titles:
-            current_kodule = base_kodule
-            kesson_path = [k.strip() for k in kesson_title.split('>')][1:]
-            for path_item in kesson_path[:-1]:
-                current_kodule = current_kodule.get_subkodule(path_item)
-                if current_kodule is None:
-                    print "Error finding kesson from path."
-                    raise Exception
-            kesson = current_kodule.get_kesson(kesson_path[-1])
+        for kesson_pathname in self.kessons_pathnames:
+            kodule_path = os.path.dirname(kesson_pathname)
+            kesson_name = os.path.basename(kesson_pathname)
+            kdl = kodule.all_kodules[kodule_path]
+            kesson = kdl.get_kesson(kesson_name)
             if kesson is None:
                 print "Error finding kesson from name."
                 raise Exception

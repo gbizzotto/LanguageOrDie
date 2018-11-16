@@ -36,7 +36,7 @@ class Session:
 
     def touch(self):
         self.dirty = True
-        self.persist = datetime.datetime.now() + datetime.timedelta(minutes=2)
+        self.persist = datetime.datetime.now() + datetime.timedelta(seconds=2)
 
     def serialize(self):
         return {k:v.serialize() for k,v in self.kbs.iteritems()}
@@ -69,27 +69,26 @@ class Session:
             # study kourse
             output = ''
             kourse = kodule.all_kourses[selected_item]
-            if kourse.title not in self.kbs:
+            if kourse.pathname not in self.kbs:
                 yield kourse.title + ':\n' \
                     + ' '.join(kourse.initial_material) \
                     + '\n\n' \
                     + u'Envie "ok" para começar o curso ou "não" para voltar para a escolha do curso.'
                 if util.normalize_caseless(input.value) != 'ok':
                     continue
-                self.kbs[kourse.title] = kb.KnowledgeBase() # TODO load from file/DB
+                self.kbs[kourse.pathname] = kb.KnowledgeBase() # TODO load from file/DB
             else:
                 output += 'Vamos continuar!\n\n'
-            for x in study.study(input, kourse, self.kbs[kourse.title]):
+            for x in study.study(input, kourse, self.kbs[kourse.pathname]):
                 yield output + x
 
             now = datetime.datetime.now()
-            be_back_datetime = self.kbs[kourse.title].get_next_revision_datetime() + datetime.timedelta(seconds=59)
+            be_back_datetime = self.kbs[kourse.pathname].get_next_revision_datetime() + datetime.timedelta(seconds=59)
             if be_back_datetime >= now + datetime.timedelta(days=7):
                 be_back_str = u'em ' + unicode(be_back_datetime.date())
             elif be_back_datetime.day == (now + datetime.timedelta(days=1)).day:
                 be_back_str = unicode(datetime.datetime.strftime(be_back_datetime, "%A")) + u' às ' + unicode(be_back_datetime.time())[:5]
             else:
-                be_back_str = unicode(datetime.datetime.strftime(be_back_datetime, "%A")) + u' às ' + unicode(be_back_datetime.time())[:5]
                 be_back_str = u'às ' + unicode(be_back_datetime.time())[:5]
 
             yield u"Já viu material o suficiente, chega de '" \

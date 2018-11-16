@@ -122,4 +122,4 @@ def load_all(basepath):
 
 all_kodules = load_all('./kodules')
 all_kourses = [k for (n,k) in all_kodules.iteritems() if k.is_kourse]
-all_kourses_by_title = {k.title:k for k in all_kourses}
+all_kourses_by_pathname = {k.pathname:k for k in all_kourses}
