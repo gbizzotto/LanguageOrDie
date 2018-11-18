@@ -2,8 +2,8 @@ Francês do dia a dia // The first line is the course's title
 // This is a comment, ignored by the app
 // This first block has no material, only title and references to prerequisites
 // Use references (@) to include other modules into yours
-@gabs-courses/pt-fr/cumprimentar.kodule
-@gabs-courses/pt-fr/pronomes_singulares.kodule
+@cumprimentar.kodule
+@pronomes_singulares.kodule
 // use a blank line for a new lesson
 ? Este curso de francês para brasileiros vai introduzir palavras, frases e regras de gramática
 ? aos poucos. A cada frase em português proposta, responda com a tradução.
@@ -38,3 +38,11 @@ estar -> être #verbo #infinitive
 ser, être
 ? Novamente, em francês não há distinção entre ser e estar. Usa-se "être" e o sentido é inferido pelo contexto.
 ser -> être #verbo #infinitivo
+
+Cores
+* pera -> poire #fruta #genero=feminino
+* morango -> fraise #fruta #genero=feminino
+* verde -> verte #cor #genero=feminino
+* verde -> vert #cor #genero=masculino
+* amarela -> jaune | jaunasse #cor #genero=feminino #genero=masculino
+[@fruta@g=genero] [@cor@genero=g] -> [0] [1]
