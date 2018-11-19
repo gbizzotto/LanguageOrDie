@@ -81,6 +81,7 @@ class Session:
                 output += 'Vamos continuar!\n\n'
             for x in study.study(input, kourse, self.kbs[kourse.pathname]):
                 yield output + x
+                output = ''
 
             now = datetime.datetime.now()
             be_back_datetime = self.kbs[kourse.pathname].get_next_revision_datetime() + datetime.timedelta(seconds=59)

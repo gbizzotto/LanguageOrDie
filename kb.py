@@ -22,7 +22,7 @@ class Answers:
                 if str.startswith(util.normalize_caseless(possibility)):
                     if Answers.match(str[len(possibility):], sequence[1:]):
                         return True
-        return len(sequence) == 0
+        return len(sequence) == 0 and len(str) == 0
 
     def get_possible_solution(self):
         result = ''
