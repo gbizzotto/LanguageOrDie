@@ -2,17 +2,17 @@ Pessoas
 ? Sujeitos para construir frases
 
 Sujeitos
-? Pessoa(s) (人), homem (), mulher (), menino (), menina  ()
-Pessoa | Pessoas -> 人
-Homen  -> 男人 #pessoa #singular
-Mulher -> 女人 #pessoa #singular
-Menino -> 男孩 #pessoa #singular
-Menina -> 女孩 #pessoa #singular
+? Pessoa(s) (人), homem (男人), mulher (女人), menino (男孩), menina  (女孩)
+Pessoa -> 人   #pessoa #pluralidade=singular
+Homen  -> 男人 #pessoa #pluralidade=singular #genero=masculino
+Mulher -> 女人 #pessoa #pluralidade=singular #genero=feminino
+Menino -> 男孩 #pessoa #pluralidade=singular #genero=masculino
+Menina -> 女孩 #pessoa #pluralidade=singular #genero=feminino
 
 Plural
 ? Para o plural, acrescentar '们'
-Pessoas  -> 人们   #pessoa #plural
-Homens   -> 男人们 #pessoa #plural
-Mulheres -> 女人们 #pessoa #plural
-Meninos  -> 男孩们 #pessoa #plural
-Meninas  -> 女孩们 #pessoa #plural
+Pessoas  -> 人们   #pessoa #pluralidade=plural
+Homens   -> 男人们 #pessoa #pluralidade=plural #genero=masculino
+Mulheres -> 女人们 #pessoa #pluralidade=plural #genero=feminino
+Meninos  -> 男孩们 #pessoa #pluralidade=plural #genero=masculino
+Meninas  -> 女孩们 #pessoa #pluralidade=plural #genero=feminino

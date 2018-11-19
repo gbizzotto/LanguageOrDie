@@ -21,3 +21,14 @@ estar -> 在
 * estão   -> 在 #verbo #estar #pluralidade=plural   #pessoa=3a
 [@pronome@pl=pluralidade@pe=pessoa] [@verbo@ser  @pluralidade=pl@pessoa=pe] -> [0][1]
 [@pronome@pl=pluralidade@pe=pessoa] [@verbo@estar@pluralidade=pl@pessoa=pe] -> [0][1]
+
+Ter
+? Verbo ter
+ter -> 有 #verbo #ter #infinitivo
+* tenho -> 有 #verbo #ter #pluralidade=singular #pessoa=1a 
+* tem   -> 有 #verbo #ter #pluralidade=singular #pessoa=2a
+* tem   -> 有 #verbo #ter #pluralidade=singular #pessoa=3a
+* temos -> 有 #verbo #ter #pluralidade=plural #pessoa=1a
+* têm   -> 有 #verbo #ter #pluralidade=plural #pessoa=2a
+* têm   -> 有 #verbo #ter #pluralidade=plural #pessoa=3a
+[@pronome@pl=pluralidade@pe=pessoa] [@verbo@ter@pluralidade=pl@pessoa=pe] -> [0][1]

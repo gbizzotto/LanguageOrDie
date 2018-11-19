@@ -1,0 +1,52 @@
+Alimentação 1
+? Comer e beber!
+@gabs-courses/pt-zh/ser-estar.kodule
+
+Comer, conjugaçao
+? comer: manger
+? eu como: je mange
+? você come : tu manges
+? ele come : il mange
+? ela come : elle mange
+comer     -> manger     #verbo #comer #infinitivo
+eu como   -> je mange   #verbo #comer #pluralidade=singular #pessoa=1a
+você come -> tu manges  #verbo #comer #pluralidade=singular #pessoa=2a
+ele come  -> il mange   #verbo #comer #pluralidade=singular #pessoa=3a
+ela come  -> elle mange #verbo #comer #pluralidade=singular #pessoa=3a
+
+Comer frutas
+? fruta: fruit
+? pera: poire
+? maçã: pomme
+? melancia: pastèque
+comer    -> manger          #verbo #comer #infinitivo
+fruta    -> un fruit        #fruta #comida
+pera     -> une poire       #fruta #comida
+maçã     -> une pomme       #fruta #comida
+melancia -> de la pastèque  #fruta #comida
+[@pronome@pl=pluralidade@pe=pessoa] [@verbo@comer@pluralidade=pl@pessoa=pe] [@comida] -> [0] [1] [2]
+
+Beber, conjugação
+? beber: boire
+? eu bebo: je bois
+? você bebe: tu bois
+? ele bebe: il boit
+? ela bebe: elle boit
+beber     -> boire
+eu bebo   -> je bois    #verbo #beber #pluralidade=singular #pessoa=1a
+você bebe -> tu bois    #verbo #comer #pluralidade=singular #pessoa=2a
+ele bebe  -> il boit    #verbo #comer #pluralidade=singular #pessoa=3a
+ela bebe  -> elle boit  #verbo #comer #pluralidade=singular #pessoa=3a
+
+Beber
+? beber: boire
+? água: eau
+? café: café
+? suco de fruta: jus de fruit
+? chá: thé
+beber: boire   #vebo #beber #infinitivo
+água: de l'eau    #bebida
+café: du café     #bebida
+suco de fruta: du jus de fruit #bebida
+chá: du thé       #bebida
+[@pronome@pl=pluralidade@pe=pessoa] [@verbo@beber@pluralidade=pl@pessoa=pe] [@bebida] -> [0] [1] [2]

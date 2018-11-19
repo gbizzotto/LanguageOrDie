@@ -9,10 +9,14 @@ Comer
 ? Maçã: 苹果
 ? Melancia: 西瓜
 comer    -> 吃   #verbo #infinitivo
-fruta    -> 水果  #fruta #comida
-pera     -> 梨    #fruta #comida
-maçã     -> 苹果  #fruta #comida
-melancia -> 西瓜  #fruta #comida
+fruta    -> 水果  #fruta #comida #genero=feminino #pluralidade=singular
+pera     -> 梨    #fruta #comida #genero=feminino #pluralidade=singular
+maçã     -> 苹果  #fruta #comida #genero=feminino #pluralidade=singular
+melancia -> 西瓜  #fruta #comida #genero=feminino #pluralidade=singular
+frutas    -> 水果  #fruta #comida #genero=feminino #pluralidade=plural
+peras     -> 梨    #fruta #comida #genero=feminino #pluralidade=plural
+maçãs     -> 苹果  #fruta #comida #genero=feminino #pluralidade=plural
+melancias -> 西瓜  #fruta #comida #genero=feminino #pluralidade=plural
 [@pronome@pl=pluralidade@pe=pessoa] [@verbo@estar@pluralidade=pl@pessoa=pe] comendo [@comida] -> [0][1]吃[2]
 
 Beber
