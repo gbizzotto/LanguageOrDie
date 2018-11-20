@@ -62,7 +62,7 @@ class KnowledgeBase:
         return {u'kessons_pathnames': [t for t in self.kessons_pathnames], u'knowledge_items': [kbi.serialize() for kbi in self.knowledge_items]}
     
     def deserialize(self, j, kourse_pathname):
-        self.kessons_pathnames = j['kessons_pathnames']
+        self.kessons_pathnames = set(j['kessons_pathnames'])
 
         all_kbis_by_translation_data = {}
         for kesson_pathname in self.kessons_pathnames:

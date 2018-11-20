@@ -33,7 +33,10 @@ def telegram_bot_handle(msg):
         pass
     session.sessions[session_id].lock.release()
     print str(datetime.datetime.now()), msg['from']['first_name'], '<-', output
-    bot.sendMessage(chat_id, output)
+    if len(output) != 0:
+        bot.sendMessage(chat_id, output)
+    else:
+        print "Bot would have sent an empty message."
 
 def console_main():
     sess = session.Session()
