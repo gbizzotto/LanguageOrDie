@@ -128,6 +128,8 @@ class KnowledgeBase:
                 raise Exception
             if parts[1] in variables:
                 value_tags[parts[0]] = variables[parts[1]]
+            elif len(parts[1]) >= 3 and parts[1][0] == "'" and parts[1][-1] == "'":
+                value_tags[parts[0]] = [parts[1][1:-1]]
             else:
                 new_variables[parts[0]] = parts[1]
 
