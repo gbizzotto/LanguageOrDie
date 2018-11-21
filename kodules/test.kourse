@@ -2,15 +2,16 @@ Test // The first line is the course's title
 ? Curso de teste. Rapidinho para chegar logo no fim.
 
 Singular
-? eu (我), você (你), ele (他), ela (她)
-* eu   -> 我   #pronome #pluralidade=singular #pessoa=1a
-* você -> 你   #pronome #pluralidade=singular #pessoa=2a #informal
-* ele  -> 他   #pronome #pluralidade=singular #pessoa=3a
-* ela  -> 她   #pronome #pluralidade=singular #pessoa=3a
-? Para construir um pronome plural,
-? basta acrescentar '们' ao pronome singular
-* nós   ->  我们   #pronome #pluralidade=plural #pessoa=1a
-* vocês ->  你们   #pronome #pluralidade=plural #pessoa=2a #informal
-* eles  ->  他们   #pronome #pluralidade=plural #pessoa=3a
-* elas  ->  她们   #pronome #pluralidade=plural #pessoa=3a
-[@pronome@pluralidade='plural'] -> [0]
+*um   -> un    #numero  #pluralidade=singular #genero=masculino
+*uma  -> une   #numero  #pluralidade=singular #genero=feminino
+*dois -> deux  #numero  #pluralidade=plural   #genero=masculino,neutro
+*duas -> deux  #numero  #pluralidade=plural   #genero=feminino
+*dez  -> dix   #numero  #pluralidade=plural   #quantidade #genero=masculino,feminino,neutro
+*abacaxi -> ananas #pluralidade=singular #genero=masculino  #fruta
+*abacaxis -> ananas #pluralidade=plural   #genero=masculino  #fruta
+*maçã  -> pomme  #pluralidade=singular #genero=feminino  #fruta
+*maçãs -> pommes #pluralidade=plural   #genero=feminino  #fruta
+[@numero@pluralidade='singular'@g=genero] [@fruta@genero=g@pluralidade='singular'] -> [0] [1]
+[@numero@pluralidade='plural'  @g=genero] [@fruta@genero=g@pluralidade='plural'  ] -> [0] [1]
+elas [@numero@pluralidade='plural'@genero='feminino'] -> elles [0]
+eux [@numero@pluralidade='plural'@genero='neutro'] -> elles [0]

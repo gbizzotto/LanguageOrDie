@@ -52,6 +52,17 @@ class KnowledgeItem:
         self.times_got_right += step_count
         self.next_revision_datetime = datetime.datetime.now() + KnowledgeItem.time_interval * (3**self.times_got_right - 1)
 
+
+def tags_are_compatible(true_tags, value_tags, kbi_tags):
+    if not true_tags.viewitems() <= kbi_tags.viewitems():
+        return False
+    for k,v in value_tags.iteritems():
+        if k in kbi_tags:
+            if len(list(set(v) & set(kbi_tags[k]))) == 0:
+                return False
+    return True
+
+
 class KnowledgeBase:
     def __init__(self):
         self.kessons_pathnames = set()
@@ -133,12 +144,8 @@ class KnowledgeBase:
             else:
                 new_variables[parts[0]] = parts[1]
 
-        candidate_kbis = [kbi for kbi in self.hidden_knowledge_items \
-            if true_tags.viewitems() <= kbi.translation.tags.viewitems() \
-            and value_tags.viewitems() <= kbi.translation.tags.viewitems() ]
-        candidate_kbis.extend([kbi for kbi in self.knowledge_items \
-            if true_tags.viewitems() <= kbi.translation.tags.viewitems() \
-            and value_tags.viewitems() <= kbi.translation.tags.viewitems() ])
+        candidate_kbis = [kbi for kbi in self.hidden_knowledge_items if tags_are_compatible(true_tags, value_tags, kbi.translation.tags)]
+        candidate_kbis.extend([kbi for kbi in self.knowledge_items if tags_are_compatible(true_tags, value_tags, kbi.translation.tags)])
         selected_kbi = random.choice(candidate_kbis)
 
         # set variables
