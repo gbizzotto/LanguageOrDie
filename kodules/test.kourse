@@ -11,6 +11,7 @@ Singular
 *abacaxis -> ananas #pluralidade=plural   #genero=masculino  #fruta
 *maçã  -> pomme  #pluralidade=singular #genero=feminino  #fruta
 *maçãs -> pommes #pluralidade=plural   #genero=feminino  #fruta
+* -> de la 
 [@numero@pluralidade='singular'@g=genero] [@fruta@genero=g@pluralidade='singular'] -> [0] [1]
 [@numero@pluralidade='plural'  @g=genero] [@fruta@genero=g@pluralidade='plural'  ] -> [0] [1]
 elas [@numero@pluralidade='plural'@genero='feminino'] -> elles [0]

@@ -146,6 +146,8 @@ class KnowledgeBase:
 
         candidate_kbis = [kbi for kbi in self.hidden_knowledge_items if tags_are_compatible(true_tags, value_tags, kbi.translation.tags)]
         candidate_kbis.extend([kbi for kbi in self.knowledge_items if tags_are_compatible(true_tags, value_tags, kbi.translation.tags)])
+        if len(candidate_kbis) == 0:
+            return None
         selected_kbi = random.choice(candidate_kbis)
 
         # set variables
@@ -177,6 +179,9 @@ class KnowledgeBase:
             tags = question_str[:idx]
             tags = {t.strip() for t in tags.split('@') if len(t.strip()) > 0} # set comprehension
             selected_kbi = self.get_random_kbi_by_tags(tags, tag_values)
+            if selected_kbi is None:
+                print u'No matching knowledge base item for', question_str, ', tags:', tags, ', tag_values:', tag_values
+                return None, None
 
             question_parts.append(random.choice(selected_kbi.translation.natives))
             answer_matches.append(selected_kbi.translation.targets)
