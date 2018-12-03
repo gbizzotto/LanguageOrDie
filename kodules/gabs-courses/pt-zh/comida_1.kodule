@@ -26,7 +26,7 @@ Beber
 ? suco de fruta: 果汁
 ? chá: 茶
 beber -> 喝            #verbo
-water -> 水            #bebida
+água -> 水             #bebida
 café  -> 咖啡           #bebida
 suco de fruta -> 果汁  #bebida
 chá -> 茶              #bebida
