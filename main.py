@@ -45,7 +45,7 @@ def console_main():
     output = session.Session.intro
     for x in sess.generator:
         output += x
-        session.input.value = raw_input(output + ' > ').decode(sys.stdin.encoding)
+        session.input.value = raw_input(output + u' > ').decode(sys.stdin.encoding)
         output = ''
 
 def telegram_bot_main():    
