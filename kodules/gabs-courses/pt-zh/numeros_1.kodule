@@ -15,23 +15,16 @@ De 1 a 10
 ? nove  : 九
 ? dez   : 十
 um    -> 一 #numero #cardinal #pluralidade=singular #quantidade #genero=masculino
+uma   -> 一 #numero #cardinal #pluralidade=singular #quantidade #genero=feminino
 dois  -> 二 #numero #cardinal #pluralidade=plural
-dois  -> 两 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino
-três  -> 三 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino
-quatro-> 四 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino
-cinco -> 五 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino
-seis  -> 六 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino
-sete  -> 七 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino
-oito  -> 八 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino
-nove  -> 九 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino
-dez   -> 十 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino
-uma   -> 一 #numero #cardinal #pluralidade=singular #quantidade @genero=feminino
-duas  -> 两 #numero #cardinal #pluralidade=plural   #quantidade @genero=feminino
-três  -> 三 #numero #cardinal #pluralidade=plural   #quantidade @genero=feminino
-quatro-> 四 #numero #cardinal #pluralidade=plural   #quantidade @genero=feminino
-cinco -> 五 #numero #cardinal #pluralidade=plural   #quantidade @genero=feminino
-seis  -> 六 #numero #cardinal #pluralidade=plural   #quantidade @genero=feminino
-sete  -> 七 #numero #cardinal #pluralidade=plural   #quantidade @genero=feminino
-oito  -> 八 #numero #cardinal #pluralidade=plural   #quantidade @genero=feminino
-nove  -> 九 #numero #cardinal #pluralidade=plural   #quantidade @genero=feminino
-dez   -> 十 #numero #cardinal #pluralidade=plural   #quantidade @genero=feminino
+*dois -> 两 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino #quantidade #dois
+duas  -> 两 #numero #cardinal #pluralidade=plural   #quantidade #genero=feminino  #quantidade
+três  -> 三 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino,feminino
+quatro-> 四 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino,feminino
+cinco -> 五 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino,feminino
+seis  -> 六 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino,feminino
+sete  -> 七 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino,feminino
+oito  -> 八 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino,feminino
+nove  -> 九 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino,feminino
+dez   -> 十 #numero #cardinal #pluralidade=plural   #quantidade #genero=masculino,feminino
+[@dois@quantidade] (quantidade) -> [0]
