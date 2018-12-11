@@ -31,7 +31,18 @@ class Answers:
         return result
 
 class KnowledgeItem:
-    time_interval = datetime.timedelta(minutes=1)
+    repeat_intervals = \
+        [datetime.timedelta(minutes=0)\
+        ,datetime.timedelta(minutes=0)\
+        ,datetime.timedelta(minutes=1)\
+        ,datetime.timedelta(minutes=10)\
+        ,datetime.timedelta(hours=1)\
+        ,datetime.timedelta(days=1)\
+        ,datetime.timedelta(days=1)\
+        ,datetime.timedelta(days=5)\
+        ,datetime.timedelta(days=31)\
+        ,datetime.timedelta(days=90)\
+        ]
 
     def __init__(self, translation):
         self.translation = translation
@@ -45,12 +56,13 @@ class KnowledgeItem:
             u'times_got_right': self.times_got_right}
 
     def deserialize(self, j):
-        self.next_revision_datetime = d = datetime.datetime.strptime(j['next_revision_datetime'], "%Y-%m-%d %H:%M:%S")
+        self.next_revision_datetime = datetime.datetime.strptime(j['next_revision_datetime'], "%Y-%m-%d %H:%M:%S")
         self.times_got_right = j['times_got_right']
 
     def consolidate(self, step_count):
         self.times_got_right += step_count
-        self.next_revision_datetime = datetime.datetime.now() + KnowledgeItem.time_interval * (3**self.times_got_right - 1)
+        delay_idx = min(self.times_got_right, len(KnowledgeItem.repeat_intervals) - 1)
+        self.next_revision_datetime = datetime.datetime.now() + KnowledgeItem.repeat_intervals[delay_idx]
 
 class KnowledgeBase:
     def __init__(self):
