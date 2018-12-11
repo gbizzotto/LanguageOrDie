@@ -4,7 +4,13 @@ import time
 import sys
 import datetime
 import locale
-locale.setlocale(locale.LC_TIME, "pt_BR.utf8")
+try:
+    locale.setlocale(locale.LC_TIME, "pt_BR.utf8")
+except:
+    try:
+        locale.setlocale(locale.LC_TIME, "pt_BR.UTF-8")
+    except:
+        pass
 
 import telepot
 from telepot.loop import MessageLoop
