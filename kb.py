@@ -10,8 +10,9 @@ import util
 
 
 class Answers:
-    def __init__(self, match_list):
+    def __init__(self, match_list, kbis_involved):
         self.sequence = match_list
+        self.kbis_involved = kbis_involved
     def accept(self, tentative):
         return Answers.match(util.normalize_caseless(tentative), self.sequence)
 
@@ -167,6 +168,8 @@ class KnowledgeBase:
         answer_matches = []
         idx = question_str.find('[')
         tag_values = {}
+        kbis_involved = set()
+        kbis_involved.add(kbi)
         while idx != -1:
             if idx > 0:
                 question_parts.append(question_str[:idx])
@@ -181,6 +184,7 @@ class KnowledgeBase:
             tags = {t.strip() for t in tags.split('@') if len(t.strip()) > 0} # set comprehension
             selected_kbi = self.get_random_kbi_by_tags(tags, tag_values)
 
+            kbis_involved.add(selected_kbi)
             question_parts.append(random.choice(selected_kbi.translation.natives))
             answer_matches.append(selected_kbi.translation.targets)
 
@@ -210,4 +214,4 @@ class KnowledgeBase:
         if len(answer_str) > 0:
             answer_parts.append([answer_str])
 
-        return ''.join(question_parts), Answers(answer_parts)
+        return ''.join(question_parts), Answers(answer_parts, kbis_involved)

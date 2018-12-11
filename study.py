@@ -38,11 +38,9 @@ def revise(input, knowledge_base):
                 break
             hint = u'Resposta errada\n'
             continue
+        for kbi_involved in answers.kbis_involved:
+            kbi_involved.consolidate(1 if tries == 1 else 0)
         del kbis[kbi_idx]
-        if tries == 1:
-            kbi.consolidate(1)
-        else:
-            kbi.consolidate(0)
         kbis.add(kbi)
 
 def study(input, kodule, knowledge_base):
