@@ -13,8 +13,7 @@ def revise(input, knowledge_base):
     kbis = knowledge_base.get_kbis_to_revise()
     if len(kbis) == 0:
         return
-    now = datetime.datetime.now()
-    while kbis[0].next_revision_datetime <= now:
+    while kbis[0].next_revision_datetime <= datetime.datetime.now():
         kbs_past_time_count = 0
         while kbs_past_time_count<10 and kbs_past_time_count < len(kbis) and kbis[kbs_past_time_count].next_revision_datetime <= now:
             kbs_past_time_count += 1
