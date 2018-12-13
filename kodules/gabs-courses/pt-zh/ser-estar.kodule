@@ -23,8 +23,8 @@ estar -> 在
 [@pronome@pl=pluralidade@pe=pessoa] [@verbo@estar@pluralidade=pl@pessoa=pe] -> [0][1]
 
 Ter
-? Verbo ter (有)
-ter -> 有 #verbo #ter #infinitivo
+? Verbo ter
+ter -> 有 #verbo #ter #infinitivo #pessoa=
 * tenho -> 有 #verbo #ter #pluralidade=singular #pessoa=1a 
 * tem   -> 有 #verbo #ter #pluralidade=singular #pessoa=2a
 * tem   -> 有 #verbo #ter #pluralidade=singular #pessoa=3a

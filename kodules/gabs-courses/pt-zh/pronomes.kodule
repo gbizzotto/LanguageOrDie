@@ -11,7 +11,8 @@ ela  -> 她   #pronome #pluralidade=singular #pessoa=3a
 Plural
 ? Para construir um pronome plural,
 ? basta acrescentar '们' ao pronome singular
-nós ->   我们   #pronome #pluralidade=plural #pessoa=1a
-vocês -> 你们   #pronome #pluralidade=plural #pessoa=2a #informal
-eles ->  他们   #pronome #pluralidade=plural #pessoa=3a
-elas ->  她们   #pronome #pluralidade=plural #pessoa=3a
+* nós   ->  我们   #pronome #pluralidade=plural #pessoa=1a
+* vocês ->  你们   #pronome #pluralidade=plural #pessoa=2a #informal
+* eles  ->  他们   #pronome #pluralidade=plural #pessoa=3a
+* elas  ->  她们   #pronome #pluralidade=plural #pessoa=3a
+[@pronome@pluralidade='plural'] -> [0]

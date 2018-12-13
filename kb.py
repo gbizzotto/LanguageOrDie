@@ -65,6 +65,17 @@ class KnowledgeItem:
         delay_idx = min(self.times_got_right, len(KnowledgeItem.repeat_intervals) - 1)
         self.next_revision_datetime = datetime.datetime.now() + KnowledgeItem.repeat_intervals[delay_idx]
 
+
+def tags_are_compatible(true_tags, value_tags, kbi_tags):
+    if not true_tags.viewitems() <= kbi_tags.viewitems():
+        return False
+    for k,v in value_tags.iteritems():
+        if k in kbi_tags:
+            if len(list(set(v) & set(kbi_tags[k]))) == 0:
+                return False
+    return True
+
+
 class KnowledgeBase:
     def __init__(self):
         self.kessons_pathnames = set()
@@ -141,15 +152,15 @@ class KnowledgeBase:
                 raise Exception
             if parts[1] in variables:
                 value_tags[parts[0]] = variables[parts[1]]
+            elif len(parts[1]) >= 3 and parts[1][0] == "'" and parts[1][-1] == "'":
+                value_tags[parts[0]] = [parts[1][1:-1]]
             else:
                 new_variables[parts[0]] = parts[1]
 
-        candidate_kbis = [kbi for kbi in self.hidden_knowledge_items \
-            if true_tags.viewitems() <= kbi.translation.tags.viewitems() \
-            and value_tags.viewitems() <= kbi.translation.tags.viewitems() ]
-        candidate_kbis.extend([kbi for kbi in self.knowledge_items \
-            if true_tags.viewitems() <= kbi.translation.tags.viewitems() \
-            and value_tags.viewitems() <= kbi.translation.tags.viewitems() ])
+        candidate_kbis = [kbi for kbi in self.hidden_knowledge_items if tags_are_compatible(true_tags, value_tags, kbi.translation.tags)]
+        candidate_kbis.extend([kbi for kbi in self.knowledge_items if tags_are_compatible(true_tags, value_tags, kbi.translation.tags)])
+        if len(candidate_kbis) == 0:
+            return None
         selected_kbi = random.choice(candidate_kbis)
 
         # set variables
@@ -183,6 +194,9 @@ class KnowledgeBase:
             tags = question_str[:idx]
             tags = {t.strip() for t in tags.split('@') if len(t.strip()) > 0} # set comprehension
             selected_kbi = self.get_random_kbi_by_tags(tags, tag_values)
+            if selected_kbi is None:
+                print u'No matching knowledge base item for', question_str, ', tags:', tags, ', tag_values:', tag_values
+                return None, None
 
             kbis_involved.add(selected_kbi)
             question_parts.append(random.choice(selected_kbi.translation.natives))

@@ -13,10 +13,10 @@ fruta    -> 水果  #fruta #comida #genero=feminino #pluralidade=singular
 pera     -> 梨    #fruta #comida #genero=feminino #pluralidade=singular
 maçã     -> 苹果  #fruta #comida #genero=feminino #pluralidade=singular
 melancia -> 西瓜  #fruta #comida #genero=feminino #pluralidade=singular
-frutas    -> 水果  #fruta #comida #genero=feminino #pluralidade=plural
-peras     -> 梨    #fruta #comida #genero=feminino #pluralidade=plural
-maçãs     -> 苹果  #fruta #comida #genero=feminino #pluralidade=plural
-melancias -> 西瓜  #fruta #comida #genero=feminino #pluralidade=plural
+* frutas    -> 水果  #fruta #comida #genero=feminino #pluralidade=plural
+* peras     -> 梨    #fruta #comida #genero=feminino #pluralidade=plural
+* maçãs     -> 苹果  #fruta #comida #genero=feminino #pluralidade=plural
+* melancias -> 西瓜  #fruta #comida #genero=feminino #pluralidade=plural
 [@pronome@pl=pluralidade@pe=pessoa] [@verbo@estar@pluralidade=pl@pessoa=pe] comendo [@comida] -> [0][1]吃[2]
 
 Beber
@@ -25,9 +25,9 @@ Beber
 ? café: 咖啡
 ? suco de fruta: 果汁
 ? chá: 茶
-beber: 喝            #verbo
-water: 水            #bebida
-café: 咖啡           #bebida
-suco de fruta: 果汁  #bebida
-chá: 茶              #bebida
+beber -> 喝            #verbo
+água -> 水             #bebida
+café  -> 咖啡           #bebida
+suco de fruta -> 果汁  #bebida
+chá -> 茶              #bebida
 [@pronome@pl=pluralidade@pe=pessoa] [@verbo@estar@pluralidade=pl@pessoa=pe] bebendo [@bebida] -> [0][1]喝[2]

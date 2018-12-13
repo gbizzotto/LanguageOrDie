@@ -1,26 +1,18 @@
 Test // The first line is the course's title
 ? Curso de teste. Rapidinho para chegar logo no fim.
 
-ser & estar, être
-? Não há distinção entre ser e estar em francês. O verbo é 'être'.
-? A diferença é feita pelo contexto.
-* pera -> poire #fruta #genero=feminino
-* morango -> fraise #fruta #genero=feminino
-* verde -> verte #cor #genero=feminino
-* verde -> vert #cor #genero=masculino
-* amarela -> jaune | jaunasse #cor #genero=feminino #genero=masculino
-[@fruta@g=genero] [@cor@genero=g] -> [0] [1]
-// ser -> être #verbo #infinitivo #etre
-// estar -> être #verbo #infinitivo #etre
-// [@verbo] -> [0]
-* eu -> je    #pronome #singular #pessoa=1a
-* tu -> tu    #pronome #singular #pessoa=2a
-* ele -> il   #pronome #singular #pessoa=3a 
-* ela -> elle #pronome #singular #pessoa=3a
-* vou -> vais #conjugacao #singular #pessoa=1a #ir
-* vai -> vas #conjugacao #singular #pessoa=2a #ir
-* vai -> va #conjugacao #singular #pessoa=3a #ir
-// Now let's ask the app to form a pseudo-random sentence
-// with a singular pronoun and a matching conjugation of "ir"
-// eu vou -> je vais, você vai -> tu vas, ele vai -> il|elle va
-[@pronome@singular@p=pessoa] [@ir@conjugacao@pessoa=p] -> [0] [1]
+Singular
+*um   -> un    #numero  #pluralidade=singular #genero=masculino
+*uma  -> une   #numero  #pluralidade=singular #genero=feminino
+*dois -> deux  #numero  #pluralidade=plural   #genero=masculino,neutro
+*duas -> deux  #numero  #pluralidade=plural   #genero=feminino
+*dez  -> dix   #numero  #pluralidade=plural   #quantidade #genero=masculino,feminino,neutro
+*abacaxi -> ananas #pluralidade=singular #genero=masculino  #fruta
+*abacaxis -> ananas #pluralidade=plural   #genero=masculino  #fruta
+*maçã  -> pomme  #pluralidade=singular #genero=feminino  #fruta
+*maçãs -> pommes #pluralidade=plural   #genero=feminino  #fruta
+* -> de la 
+[@numero@pluralidade='singular'@g=genero] [@fruta@genero=g@pluralidade='singular'] -> [0] [1]
+[@numero@pluralidade='plural'  @g=genero] [@fruta@genero=g@pluralidade='plural'  ] -> [0] [1]
+elas [@numero@pluralidade='plural'@genero='feminino'] -> elles [0]
+eux [@numero@pluralidade='plural'@genero='neutro'] -> elles [0]

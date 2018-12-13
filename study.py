@@ -23,6 +23,8 @@ def revise(input, knowledge_base):
             kbi_idx = random.randint(0, kbs_past_time_count-1)
         kbi = kbis[kbi_idx]
         question, answers = knowledge_base.get_question_from_kbi(kbi)
+        if question is None:
+            continue
         tries = 0
         hint = ''
         while True:
@@ -69,7 +71,7 @@ def study(input, kodule, knowledge_base):
                 for im in kesson.initial_material:
                     output += '    ' + im + '\n'
             else:
-                output = 'Não há material inicial.'
+                output = u'Não há material inicial.'
         for x in revise(input, knowledge_base):
             yield output + x
             if input.value == '!':

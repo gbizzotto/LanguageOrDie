@@ -3,6 +3,7 @@
 import time
 import sys
 import datetime
+import traceback
 import locale
 try:
     locale.setlocale(locale.LC_TIME, "pt_BR.utf8")
@@ -36,7 +37,6 @@ def telegram_bot_handle(msg):
         output += session.sessions[session_id].generator.next()
         session.sessions[session_id].touch()
     except Exception, e:
-        import traceback
         print e
         print traceback.format_exc()
     session.sessions[session_id].lock.release()
@@ -51,7 +51,7 @@ def console_main():
     output = session.Session.intro
     for x in sess.generator:
         output += x
-        session.input.value = raw_input(output + ' > ').decode(sys.stdin.encoding)
+        session.input.value = raw_input(output + u' > ').decode(sys.stdin.encoding)
         output = ''
 
 def telegram_bot_main():    

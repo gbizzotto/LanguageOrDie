@@ -25,7 +25,7 @@ class Translation:
         tag_list = [x.strip() for x in line.split('#')]
         self.data = tag_list[0]
         del tag_list[0]
-        self.tags = {t.split('=')[0]:[t.split('=')[1]] if len(t.split('='))>1 else [True] for t in tag_list}
+        self.tags = {t.split('=')[0]:[v for v in t.split('=')[1].split(',') if len(v)>0] if len(t.split('='))>1 else [True] for t in tag_list}
         # translations
         native, target = self.data.split('->')
         self.natives = [x.strip() for x in native.split('|')]
