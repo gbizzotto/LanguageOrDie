@@ -52,52 +52,58 @@ class Session:
     def run(self):
         global input
         while True:
-            # choose kourse
-            while True:
-                i=1
-                output = u'Cursos disponíveis:\n\n'
-                for k in kodule.all_kourses:
-                    output = output + str(i)+'. ' + k.title + '\n'
-                    i += 1
-                yield output + u"\nO que quer estudar? Digite o número do curso."
-                if not input.value.isdigit():
-                    continue
-                selected_item = int(input.value) - 1
-                if selected_item < 0 or selected_item >= len(kodule.all_kourses):
-                    continue
-                break
-            # study kourse
-            output = ''
-            kourse = kodule.all_kourses[selected_item]
-            if kourse.pathname not in self.kbs:
-                yield kourse.title + ':\n' \
-                    + ' '.join(kourse.initial_material) \
-                    + '\n\n' \
-                    + u'Envie "ok" para começar o curso ou "não" para voltar para a escolha do curso.'
-                if util.normalize_caseless(input.value) != 'ok':
-                    continue
-                self.kbs[kourse.pathname] = kb.KnowledgeBase() # TODO load from file/DB
-            else:
-                output += 'Vamos continuar!\n\n'
-            for x in study.study(input, kourse, self.kbs[kourse.pathname]):
-                yield output + x
+            try:
+                # choose kourse
+                while True:
+                    i=1
+                    output = u'Cursos disponíveis:\n\n'
+                    for k in kodule.all_kourses:
+                        output = output + str(i)+'. ' + k.title + '\n'
+                        i += 1
+                    yield output + u"\nO que quer estudar? Digite o número do curso."
+                    if not input.value.isdigit():
+                        continue
+                    selected_item = int(input.value) - 1
+                    if selected_item < 0 or selected_item >= len(kodule.all_kourses):
+                        continue
+                    break
+                # study kourse
                 output = ''
+                kourse = kodule.all_kourses[selected_item]
+                if kourse.pathname not in self.kbs:
+                    yield kourse.title + ':\n' \
+                        + ' '.join(kourse.initial_material) \
+                        + '\n\n' \
+                        + u'Envie "ok" para começar o curso ou "não" para voltar para a escolha do curso.'
+                    if util.normalize_caseless(input.value) != 'ok':
+                        continue
+                    self.kbs[kourse.pathname] = kb.KnowledgeBase() # TODO load from file/DB
+                else:
+                    output += 'Vamos continuar!\n\n'
+                for x in study.study(input, kourse, self.kbs[kourse.pathname]):
+                    yield output + x
+                    output = ''
 
-            now = datetime.datetime.now()
-            be_back_datetime = self.kbs[kourse.pathname].get_next_revision_datetime() + datetime.timedelta(seconds=59)
-            if be_back_datetime >= now + datetime.timedelta(days=7):
-                be_back_str = u'em ' + unicode(be_back_datetime.date())
-            elif be_back_datetime.day == (now + datetime.timedelta(days=1)).day:
-                be_back_str = unicode(datetime.datetime.strftime(be_back_datetime, "%A")) + u' às ' + unicode(be_back_datetime.time())[:5]
-            else:
-                be_back_str = u'às ' + unicode(be_back_datetime.time())[:5]
+                now = datetime.datetime.now()
+                be_back_datetime = self.kbs[kourse.pathname].get_next_revision_datetime() + datetime.timedelta(seconds=59)
+                if be_back_datetime >= now + datetime.timedelta(days=7):
+                    be_back_str = u'em ' + unicode(be_back_datetime.date())
+                elif be_back_datetime.day == (now + datetime.timedelta(days=1)).day:
+                    be_back_str = unicode(datetime.datetime.strftime(be_back_datetime, "%A")) + u' às ' + unicode(be_back_datetime.time())[:5]
+                else:
+                    be_back_str = u'às ' + unicode(be_back_datetime.time())[:5]
 
-            yield u"Já viu material o suficiente, chega de '" \
-                + kourse.title \
-                + u"' por enquanto.\n" \
-                + u"Por favor volte " \
-                + be_back_str \
-                + u" para revisar o que aprendeu até agora e ver coisas novas!"
+                yield u"Já viu material o suficiente, chega de '" \
+                    + kourse.title \
+                    + u"' por enquanto.\n" \
+                    + u"Por favor volte " \
+                    + be_back_str \
+                    + u" para revisar o que aprendeu até agora e ver coisas novas!"
+            except Exception, e:
+                import traceback
+                print e
+                print traceback.format_exc()
+                yield u'Me perdoe, tive um problema que me impediu de continuar. Vamos voltar do início por favor?'
 
 
 def serialize(name, sess):

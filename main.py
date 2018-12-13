@@ -35,8 +35,10 @@ def telegram_bot_handle(msg):
     try:
         output += session.sessions[session_id].generator.next()
         session.sessions[session_id].touch()
-    except:
-        pass
+    except Exception, e:
+        import traceback
+        print e
+        print traceback.format_exc()
     session.sessions[session_id].lock.release()
     print str(datetime.datetime.now()), msg['from']['first_name'], '<-', output
     if len(output) != 0:
