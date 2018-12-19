@@ -90,7 +90,7 @@ class Session:
                 if be_back_datetime >= now + datetime.timedelta(days=7):
                     be_back_str = u'em ' + unicode(be_back_datetime.date())
                 elif be_back_datetime.day == (now + datetime.timedelta(days=1)).day:
-                    print be_back_datetime
+                    util.log(be_back_datetime)
                     be_back_str = unicode(datetime.datetime.strftime(be_back_datetime, "%A")) + u' às ' + unicode(be_back_datetime.time())[:5]
                 else:
                     be_back_str = u'as ' + unicode(be_back_datetime.time())[:5]
@@ -103,8 +103,8 @@ class Session:
                     + u" para revisar o que aprendeu até agora e ver coisas novas!"
             except Exception, e:
                 import traceback
-                print e
-                print traceback.format_exc()
+                util.log(e)
+                util.log(traceback.format_exc())
                 yield u'Me perdoe, tive um problema que me impediu de continuar. Vamos voltar do início por favor?'
 
 

@@ -2,6 +2,7 @@
  
 import os
 import io
+import util
 
 kodule_extenstion = '.kodule'
 kourse_extenstion = '.kourse'
@@ -80,7 +81,7 @@ class Kodule:
                     dependency_fullpath = os.path.join(basepath, line[1:].strip())
                     if dependency_fullpath in kodules:
                         if kodules[dependency_fullpath] is None:
-                            print u"Circular references between kodules, can't load. Aborting"
+                            util.log(u"Circular references between kodules, can't load. Aborting")
                             raise Exception()
                         else:
                             self.dependencies.append(kodules[dependency_fullpath])
@@ -110,7 +111,7 @@ class Kodule:
 def load_all(basepath):
     kodules = {}
     for (dirpath, dirnames, filenames) in os.walk(basepath):
-        print dirpath, dirnames, filenames
+        util.log(dirpath, dirnames, filenames)
         for f in filenames:
             if not f.endswith(kourse_extenstion) and not f.endswith(kodule_extenstion):
                 continue

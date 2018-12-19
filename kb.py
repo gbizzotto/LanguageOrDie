@@ -98,7 +98,7 @@ class KnowledgeBase:
             kdl = kodule.all_kodules[kodule_path]
             kesson = kdl.get_kesson(kesson_name)
             if kesson is None:
-                print "Error finding kesson from name."
+                util.log("Error finding kesson from name.")
                 raise Exception
             for tr in kesson.translations:
                 kbi = KnowledgeItem(tr)
@@ -190,15 +190,15 @@ class KnowledgeBase:
             question_str = question_str[idx+1:]
             idx = question_str.find(']')
             if idx == -1:
-                print u"Malformed input, missing ']'. Aborting."
-                print initial_question
+                util.log(u"Malformed input, missing ']'. Aborting.")
+                util.log(initial_question)
                 raise Exception()
 
             tags = question_str[:idx]
             tags = {t.strip() for t in tags.split('@') if len(t.strip()) > 0} # set comprehension
             selected_kbi = self.get_random_kbi_by_tags(tags, tag_values)
             if selected_kbi is None:
-                print u'No matching knowledge base item for', question_str, ', tags:', tags, ', tag_values:', tag_values
+                util.log(u'No matching knowledge base item for', question_str, ', tags:', tags, ', tag_values:', tag_values)
                 return None, None
 
             kbis_involved.add(selected_kbi)
@@ -220,8 +220,8 @@ class KnowledgeBase:
             answer_str = answer_str[idx+1:]
             idx = answer_str.find(']')
             if idx == -1:
-                print u"Malformed input, missing ']'. Aborting."
-                print initial_answer
+                util.log(u"Malformed input, missing ']'. Aborting.")
+                util.log(initial_answer)
                 raise Exception()
             answer_idx = int(answer_str[:idx])
             answer_parts.append(answer_matches[answer_idx])

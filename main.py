@@ -5,6 +5,9 @@ import sys
 import datetime
 import traceback
 import locale
+import util
+util.APP_NAME = 'LanguageOrDie'
+
 try:
     locale.setlocale(locale.LC_TIME, "pt_BR.utf8")
 except:
@@ -19,12 +22,21 @@ from telepot.namedtuple import InlineQueryResultArticle, InputTextMessageContent
 
 import telegrambot
 import session
+import signal
+
+class GracefulKiller:
+  kill_now = False
+  def __init__(self):
+    signal.signal(signal.SIGINT, self.exit_gracefully)
+    signal.signal(signal.SIGTERM, self.exit_gracefully)
+  def exit_gracefully(self,signum, frame):
+    self.kill_now = True
 
 bot = None
 
 def telegram_bot_handle(msg):
     global bot
-    print str(datetime.datetime.now()), msg['from']['first_name'], '->', msg['text']
+    util.log(str(datetime.datetime.now()), msg['from']['first_name'], '->', msg['text'])
     content_type, chat_type, chat_id = telepot.glance(msg)
     output = ''
     session_id = 'telegram-' + str(chat_id)
@@ -37,14 +49,14 @@ def telegram_bot_handle(msg):
         output += session.sessions[session_id].generator.next()
         session.sessions[session_id].touch()
     except Exception, e:
-        print e
-        print traceback.format_exc()
+        util.log(e)
+        util.log(traceback.format_exc())
     session.sessions[session_id].lock.release()
-    print str(datetime.datetime.now()), msg['from']['first_name'], '<-', output
+    util.log(unicode(datetime.datetime.now()), msg['from']['first_name'], '<-', output)
     if len(output) != 0:
         bot.sendMessage(chat_id, output)
     else:
-        print "Bot would have sent an empty message."
+        util.log("Bot would have sent an empty message.")
 
 def console_main():
     sess = session.Session()
@@ -56,12 +68,18 @@ def console_main():
 
 def telegram_bot_main():    
     global bot
+    killer = GracefulKiller()
     session.deserialize('telegram-')
     bot = telepot.Bot(telegrambot.key)
     MessageLoop(bot, telegram_bot_handle).run_as_thread()
-    print ('Listening ...')
-    while 1:
-        time.sleep(10)
+    util.log('Listening ...')
+    # serializer loop
+    while not killer.kill_now:
+        # check for SIGINT and SIGTERM for some time
+        until = datetime.datetime.now() + datetime.timedelta(seconds=10)
+        while datetime.datetime.now() < until and not killer.kill_now:
+            time.sleep(0.1)
+        # serialize students' progress so far
         for id,sess in session.sessions.iteritems():
             sess.lock.acquire()
             try:
@@ -69,7 +87,7 @@ def telegram_bot_main():
                     session.serialize(str(id), sess)
                     sess.dirty = False
             except Exception, e:
-                print 'Error in serialization:', e
+                util.log('Error in serialization:', e)
             sess.lock.release()
 
 
