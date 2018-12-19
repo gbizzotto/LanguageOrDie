@@ -1,9 +1,9 @@
 Demonstrativos
 
 Lição 1
-* este, esta -> 这
-* aquele, aquela -> 那
+? este, esta -> 这
+? aquele, aquela, esse, essa -> 那
 este   -> 这   #demonstrativo #genero=masculino
 esta   -> 这   #demonstrativo #genero=feminino
-aquele -> 那   #demonstrativo #genero=masculino
-aquela -> 那   #demonstrativo #genero=feminino
+aquele|esse -> 那   #demonstrativo #genero=masculino
+aquela|essa -> 那   #demonstrativo #genero=feminino
