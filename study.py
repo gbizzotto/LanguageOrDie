@@ -24,6 +24,7 @@ def revise(input, knowledge_base):
         kbi = kbis[kbi_idx]
         question, answers = knowledge_base.get_question_from_kbi(kbi)
         if question is None:
+            del kbis[kbi_idx]
             continue
         tries = 0
         hint = ''
@@ -63,7 +64,7 @@ def study(input, kodule, knowledge_base):
         output = u'A próxima lição do módulo "' + kodule.title + u'", é "' + kesson.title + '"\n'\
             + u'Se não quiser estudá-la, digite "pular", senão, digite "ok".'
         yield output
-        skip = util.normalize_caseless(input.value) == 'pular'
+        skip = (util.normalize_caseless(input.value) == 'pular')
         knowledge_base.add_kesson(kesson, kesson_pathname, skip)
         if not skip:
             if len(kesson.initial_material) > 0:

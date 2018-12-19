@@ -90,9 +90,10 @@ class Session:
                 if be_back_datetime >= now + datetime.timedelta(days=7):
                     be_back_str = u'em ' + unicode(be_back_datetime.date())
                 elif be_back_datetime.day == (now + datetime.timedelta(days=1)).day:
+                    print be_back_datetime
                     be_back_str = unicode(datetime.datetime.strftime(be_back_datetime, "%A")) + u' às ' + unicode(be_back_datetime.time())[:5]
                 else:
-                    be_back_str = u'às ' + unicode(be_back_datetime.time())[:5]
+                    be_back_str = u'as ' + unicode(be_back_datetime.time())[:5]
 
                 yield u"Já viu material o suficiente, chega de '" \
                     + kourse.title \

@@ -36,7 +36,10 @@ class KnowledgeItem:
         [datetime.timedelta(minutes=0)\
         ,datetime.timedelta(minutes=0)\
         ,datetime.timedelta(minutes=1)\
+        ,datetime.timedelta(minutes=1)\
         ,datetime.timedelta(minutes=10)\
+        ,datetime.timedelta(minutes=10)\
+        ,datetime.timedelta(hours=1)\
         ,datetime.timedelta(hours=1)\
         ,datetime.timedelta(days=1)\
         ,datetime.timedelta(days=1)\
