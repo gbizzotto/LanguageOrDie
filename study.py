@@ -13,9 +13,17 @@ def revise(input, knowledge_base):
     kbis = knowledge_base.get_kbis_to_revise()
     if len(kbis) == 0:
         return
-    while kbis[0].next_revision_datetime <= datetime.datetime.now():
+    revise_more = False
+    while kbis[0].next_revision_datetime <= datetime.datetime.now() + datetime.timedelta(days=1):
+        if not revise_more and kbis[0].next_revision_datetime > datetime.datetime.now():
+            yield u'Já revisou o suficiente. Pode parar por aqui e voltar mais tarde ou continuar consolidando o que aprendeu.\n'\
+                u'Responda "ok" se quiser continuar'
+            if util.normalize_caseless(input.value) == 'ok':
+                revise_more = True
+            else:
+                return
         kbs_past_time_count = 0
-        while kbs_past_time_count<10 and kbs_past_time_count < len(kbis) and kbis[kbs_past_time_count].next_revision_datetime <= datetime.datetime.now():
+        while kbs_past_time_count<10 and kbs_past_time_count < len(kbis) and kbis[kbs_past_time_count].next_revision_datetime <= datetime.datetime.now()+datetime.timedelta(days=1):
             kbs_past_time_count += 1
         if kbs_past_time_count < 10:
             kbi_idx = 0
@@ -41,21 +49,26 @@ def revise(input, knowledge_base):
             hint = u'Resposta errada\n'
             continue
         for kbi_involved in answers.kbis_involved:
-            kbi_involved.consolidate(1 if tries == 1 else 0)
+            kbi_advancement = 0
+            if tries == 1 and kbi_involved.next_revision_datetime <= datetime.datetime.now():
+                kbi_advancement = 1
+            kbi_involved.consolidate(kbi_advancement)
         del kbis[kbi_idx]
         kbis.add(kbi)
 
-def study(input, kodule, knowledge_base):
-    for dep in kodule.dependencies:
-        for x in study(input, dep, knowledge_base):
+
+def study(input, kodule, knowledge_base, do_revise=True):
+    if do_revise:
+        for x in revise(input, knowledge_base):
             yield x
             if input.value == '!':
                 return
 
-    for x in revise(input, knowledge_base):
-        yield x
-        if input.value == '!':
-            return
+    for dep in kodule.dependencies:
+        for x in study(input, dep, knowledge_base, do_revise=False):
+            yield x
+            if input.value == '!':
+                return
 
     for kesson in kodule.kessons:
         kesson_pathname = kodule.pathname + '/' + kesson.title
