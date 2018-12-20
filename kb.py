@@ -43,7 +43,18 @@ class KnowledgeItem:
         ,datetime.timedelta(hours=1)\
         ,datetime.timedelta(days=1)\
         ,datetime.timedelta(days=1)\
+        ,datetime.timedelta(days=1)\
+        ,datetime.timedelta(days=1)\
+        ,datetime.timedelta(days=1)\
         ,datetime.timedelta(days=5)\
+        ,datetime.timedelta(days=5)\
+        ,datetime.timedelta(days=5)\
+        ,datetime.timedelta(days=5)\
+        ,datetime.timedelta(days=31)\
+        ,datetime.timedelta(days=31)\
+        ,datetime.timedelta(days=31)\
+        ,datetime.timedelta(days=31)\
+        ,datetime.timedelta(days=31)\
         ,datetime.timedelta(days=31)\
         ,datetime.timedelta(days=90)\
         ]
