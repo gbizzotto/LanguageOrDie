@@ -151,7 +151,7 @@ class KnowledgeBase:
         for t in split_tags:
             parts = t.split('=')
             if len(parts) > 2 or len(parts[0]) == 0 or len(parts[1]) == 0:
-                print 'Malformed tag', t
+                util.log('Malformed tag', t)
                 raise Exception
             if parts[1] in variables:
                 value_tags[parts[0]] = variables[parts[1]]

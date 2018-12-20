@@ -52,7 +52,8 @@ def telegram_bot_handle(msg):
         util.log(e)
         util.log(traceback.format_exc())
     session.sessions[session_id].lock.release()
-    util.log(unicode(datetime.datetime.now()), msg['from']['first_name'], '<-', output)
+    for line in output.split('\n'):
+        util.log(unicode(datetime.datetime.now()), msg['from']['first_name'], '<-', line)
     if len(output) != 0:
         bot.sendMessage(chat_id, output)
     else:
