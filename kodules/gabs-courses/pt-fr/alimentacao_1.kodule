@@ -33,9 +33,9 @@ Beber, conjugação
 ? ela bebe: elle boit
 beber     -> boire
 eu bebo   -> je bois    #verbo #beber #pluralidade=singular #pessoa=1a
-você bebe -> tu bois    #verbo #comer #pluralidade=singular #pessoa=2a
-ele bebe  -> il boit    #verbo #comer #pluralidade=singular #pessoa=3a
-ela bebe  -> elle boit  #verbo #comer #pluralidade=singular #pessoa=3a
+você bebe -> tu bois    #verbo #beber #pluralidade=singular #pessoa=2a
+ele bebe  -> il boit    #verbo #beber #pluralidade=singular #pessoa=3a
+ela bebe  -> elle boit  #verbo #beber #pluralidade=singular #pessoa=3a
 
 Beber
 ? beber: boire
