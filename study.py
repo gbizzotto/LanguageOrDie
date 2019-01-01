@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
-import sys
+import sys, os
 import datetime
 import random
 
@@ -9,19 +9,14 @@ import util
 import kodule
 import kb
 
-def revise(input, knowledge_base):
+def revise(input, kourse, knowledge_base):
     kbis = knowledge_base.get_kbis_to_revise()
     if len(kbis) == 0:
         return
-    revise_more = False
-    while kbis[0].next_revision_datetime <= datetime.datetime.now() + datetime.timedelta(days=1):
-        if not revise_more and kbis[0].next_revision_datetime > datetime.datetime.now():
-            yield u'Já revisou o suficiente. Pode parar por aqui e voltar mais tarde ou continuar consolidando o que aprendeu.\n'\
-                u'Responda "ok" se quiser continuar'
-            if util.normalize_caseless(input.value) == 'ok':
-                revise_more = True
-            else:
-                return
+
+    while True:
+        can_go_to_next_kesson = kbis[0].next_revision_datetime > datetime.datetime.now()
+        # choose kbi
         kbs_past_time_count = 0
         while kbs_past_time_count<10 and kbs_past_time_count < len(kbis) and kbis[kbs_past_time_count].next_revision_datetime <= datetime.datetime.now()+datetime.timedelta(days=1):
             kbs_past_time_count += 1
@@ -30,24 +25,37 @@ def revise(input, knowledge_base):
         else:
             kbi_idx = random.randint(0, kbs_past_time_count-1)
         kbi = kbis[kbi_idx]
+        # prepare question and acceptable answers
         question, answers = knowledge_base.get_question_from_kbi(kbi)
-        if question is None:
+        if question is None: # invalid
             del kbis[kbi_idx]
             continue
+        # ask the question and check the answer
         tries = 0
         hint = ''
         while True:
-            yield hint + u'\n(? para pedir ajuda)\n' + question
+            next_lesson_text = u'(+ para ir para a próxima lição)\n' if can_go_to_next_kesson else ''
+            yield hint + u'\n(? para pedir ajuda)\n' \
+                + next_lesson_text \
+                + question
             tentative = input.value
             tries += 1
-            if tentative == '?':
+            if util.normalize_caseless(tentative) == '?':
+                # help
                 hint = u'Tradução possível: ' + answers.get_possible_solution() + '\n'\
                     + u'(! para sair do curso)\n'
+                continue
+            elif util.normalize_caseless(tentative) == '+':
+                # next lesson
+                for x in add_lesson(input, kourse, knowledge_base):
+                    yield x
+                kbis = knowledge_base.get_kbis_to_revise()
                 continue
             if answers.accept(tentative):
                 break
             hint = u'Resposta errada\n'
             continue
+        # update knowledge base
         for kbi_involved in answers.kbis_involved:
             kbi_advancement = 0
             if tries == 1 and kbi_involved.next_revision_datetime <= datetime.datetime.now():
@@ -56,38 +64,35 @@ def revise(input, knowledge_base):
         del kbis[kbi_idx]
         kbis.add(kbi)
 
-
-def study(input, kodule, knowledge_base, do_revise=True):
-    if do_revise:
-        for x in revise(input, knowledge_base):
-            yield x
-            if input.value == '!':
-                return
-
+def get_next_unknown_kesson(kodule, knowledge_base):
     for dep in kodule.dependencies:
-        for x in study(input, dep, knowledge_base, do_revise=False):
-            yield x
-            if input.value == '!':
-                return
-
+        kod, kess = get_next_unknown_kesson(dep, knowledge_base)
+        if kess is not None:
+            return kod, kess
     for kesson in kodule.kessons:
-        kesson_pathname = kodule.pathname + '/' + kesson.title
-        if knowledge_base.has_kesson(kesson_pathname):
-            continue
-        output = u'A próxima lição do módulo "' + kodule.title + u'", é "' + kesson.title + '"\n'\
-            + u'Se não quiser estudá-la, digite "pular", senão, digite "ok".'
-        yield output
-        skip = (util.normalize_caseless(input.value) == 'pular')
-        knowledge_base.add_kesson(kesson, kesson_pathname, skip)
-        if not skip:
-            if len(kesson.initial_material) > 0:
-                output = u'Material inicial:\n'
-                for im in kesson.initial_material:
-                    output += '    ' + im + '\n'
-            else:
-                output = u'Não há material inicial.'
-        for x in revise(input, knowledge_base):
-            yield output + x
-            if input.value == '!':
-                return
-            output = ''
+        kesson_pathname = os.path.join(kodule.pathname, kesson.title)
+        if not knowledge_base.has_kesson(kesson_pathname):
+            return kodule, kesson
+    return None, None
+
+def add_lesson(input, kodule, knowledge_base):
+    kodule, kesson = get_next_unknown_kesson(kodule, knowledge_base)
+    if kesson is None:
+        return
+    output = u'A próxima lição do módulo "' + kodule.title + u'", é "' + kesson.title + '"\n'
+    if len(kesson.initial_material) > 0:
+        output += u'Material inicial:\n'
+        for im in kesson.initial_material:
+            output += '    ' + im + '\n'
+    else:
+        output = u'Não há material inicial para esta lição.\n'
+    output += u'\n'\
+        + u'Se preferir continuar revisando por mais uma hora, digite "revisar".\n'\
+        + u'Se já tiver domínio do material, digite "pular".\n'\
+        + u'Se quiser estudar esta lição, digite "ok" ou qualquer outra coisa.'
+    yield output
+    if util.normalize_caseless(input.value) == 'revisar':
+        return
+    skip = (util.normalize_caseless(input.value) == 'pular')
+    kesson_pathname = os.path.join(kodule.pathname, kesson.title)
+    knowledge_base.add_kesson(kesson, kesson_pathname, skip)

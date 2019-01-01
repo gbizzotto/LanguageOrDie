@@ -5,11 +5,15 @@ import datetime
 import json
 import os
 import traceback
+import sys  
 
 import util
 import study
 import kodule
 import kb
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
 
 sessions = {}
 
@@ -72,39 +76,28 @@ class Session:
                 output = ''
                 kourse = kodule.all_kourses[selected_item]
                 if kourse.pathname not in self.kbs:
-                    yield kourse.title + ':\n' \
-                        + ' '.join(kourse.initial_material) \
-                        + '\n\n' \
+                    yield kourse.title + u':\n' \
+                        + u' '.join(kourse.initial_material) \
+                        + u'\n\n' \
                         + u'Envie "ok" para começar o curso ou "não" para voltar para a escolha do curso.'
                     if util.normalize_caseless(input.value) != 'ok':
                         continue
                     self.kbs[kourse.pathname] = kb.KnowledgeBase() # TODO load from file/DB
+                    for x in study.add_lesson(input, kourse, self.kbs[kourse.pathname]):
+                        yield x
                 else:
-                    output += 'Vamos continuar!\n\n'
-                for x in study.study(input, kourse, self.kbs[kourse.pathname]):
+                    output += u'Vamos continuar!\n\n'
+
+                for x in study.revise(input, kourse, self.kbs[kourse.pathname]):
                     yield output + x
-                    output = ''
+                    output = u''
+                    if input.value == '!':
+                        break
 
-                now = datetime.datetime.now()
-                be_back_datetime = self.kbs[kourse.pathname].get_next_revision_datetime() + datetime.timedelta(seconds=59)
-                if be_back_datetime >= now + datetime.timedelta(days=7):
-                    be_back_str = u'em ' + unicode(be_back_datetime.date())
-                elif be_back_datetime.day == (now + datetime.timedelta(days=1)).day:
-                    util.log(be_back_datetime)
-                    be_back_str = unicode(datetime.datetime.strftime(be_back_datetime, "%A")) + u' às ' + unicode(be_back_datetime.time())[:5]
-                else:
-                    be_back_str = u'as ' + unicode(be_back_datetime.time())[:5]
-
-                yield u"Já viu material o suficiente, chega de '" \
-                    + kourse.title \
-                    + u"' por enquanto.\n" \
-                    + u"Por favor volte " \
-                    + be_back_str \
-                    + u" para revisar o que aprendeu até agora e ver coisas novas!"
             except Exception, e:
                 import traceback
                 util.log(e)
-                util.log(traceback.format_exc())
+                util.log(unicode(traceback.format_exc()))
                 yield u'Me perdoe, tive um problema que me impediu de continuar. Vamos voltar do início por favor?'
 
 
