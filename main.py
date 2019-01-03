@@ -36,7 +36,7 @@ bot = None
 
 def telegram_bot_handle(msg):
     global bot
-    util.log(str(datetime.datetime.now()), msg['from']['first_name'], '->', msg['text'])
+    util.log(msg['from']['first_name'], '->', msg['text'])
     content_type, chat_type, chat_id = telepot.glance(msg)
     output = ''
     session_id = 'telegram-' + str(chat_id)
@@ -53,7 +53,7 @@ def telegram_bot_handle(msg):
         util.log(traceback.format_exc())
     session.sessions[session_id].lock.release()
     for line in output.split('\n'):
-        util.log(unicode(datetime.datetime.now()), msg['from']['first_name'], '<-', line)
+        util.log(msg['from']['first_name'], '<-', line)
     if len(output) != 0:
         bot.sendMessage(chat_id, output)
     else:
