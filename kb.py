@@ -5,7 +5,7 @@ import os
 
 from sortedcontainers import SortedList
 
-import kodule
+import module
 import util
 
 
@@ -92,26 +92,26 @@ def tags_are_compatible(true_tags, value_tags, kbi_tags):
 
 class KnowledgeBase:
     def __init__(self):
-        self.kessons_pathnames = set()
+        self.lessons_pathnames = set()
         self.knowledge_items = SortedList(key=lambda kbi:kbi.next_revision_datetime)
         self.hidden_knowledge_items = []
     
     def serialize(self):
-        return {u'kessons_pathnames': [t for t in self.kessons_pathnames], u'knowledge_items': [kbi.serialize() for kbi in self.knowledge_items]}
+        return {u'lessons_pathnames': [t for t in self.lessons_pathnames], u'knowledge_items': [kbi.serialize() for kbi in self.knowledge_items]}
     
-    def deserialize(self, j, kourse_pathname):
-        self.kessons_pathnames = set(j['kessons_pathnames'])
+    def deserialize(self, j, course_pathname):
+        self.lessons_pathnames = set(j['lessons_pathnames'])
 
         all_kbis_by_translation_data = {}
-        for kesson_pathname in self.kessons_pathnames:
-            kodule_path = os.path.dirname(kesson_pathname)
-            kesson_name = os.path.basename(kesson_pathname)
-            kdl = kodule.all_kodules[kodule_path]
-            kesson = kdl.get_kesson(kesson_name)
-            if kesson is None:
-                util.log("Error finding kesson from name.")
+        for lesson_pathname in self.lessons_pathnames:
+            module_path = os.path.dirname(lesson_pathname)
+            lesson_name = os.path.basename(lesson_pathname)
+            kdl = module.all_modules[module_path]
+            lesson = kdl.get_lesson(lesson_name)
+            if lesson is None:
+                util.log("Error finding lesson from name.")
                 raise Exception
-            for tr in kesson.translations:
+            for tr in lesson.translations:
                 kbi = KnowledgeItem(tr)
                 if kbi.hidden:
                     self.hidden_knowledge_items.append(kbi)
@@ -129,14 +129,14 @@ class KnowledgeBase:
 
         return self
 
-    def has_kesson(self, pathname):
-        return pathname in self.kessons_pathnames
+    def has_lesson(self, pathname):
+        return pathname in self.lessons_pathnames
 
-    def add_kesson(self, kesson, pathname, skip):
-        if pathname in self.kessons_pathnames:
+    def add_lesson(self, lesson, pathname, skip):
+        if pathname in self.lessons_pathnames:
             return
-        self.kessons_pathnames.add(pathname)
-        for tr in kesson.translations:
+        self.lessons_pathnames.add(pathname)
+        for tr in lesson.translations:
             kbi = KnowledgeItem(tr)
             if kbi.hidden:
                 self.hidden_knowledge_items.append(kbi)

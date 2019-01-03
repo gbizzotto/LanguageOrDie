@@ -6,16 +6,16 @@ import datetime
 import random
 
 import util
-import kodule
+import module
 import kb
 
-def revise(input, kourse, knowledge_base):
+def revise(input, course, knowledge_base):
     kbis = knowledge_base.get_kbis_to_revise()
     if len(kbis) == 0:
         return
 
     while True:
-        can_go_to_next_kesson = kbis[0].next_revision_datetime > datetime.datetime.now()
+        can_go_to_next_lesson = kbis[0].next_revision_datetime > datetime.datetime.now()
         # choose kbi
         kbs_past_time_count = 0
         while kbs_past_time_count<10 and kbs_past_time_count < len(kbis) and kbis[kbs_past_time_count].next_revision_datetime <= datetime.datetime.now()+datetime.timedelta(days=1):
@@ -34,7 +34,7 @@ def revise(input, kourse, knowledge_base):
         tries = 0
         hint = ''
         while True:
-            next_lesson_text = u'(+ para ir para a próxima lição)\n' if can_go_to_next_kesson else ''
+            next_lesson_text = u'(+ para ir para a próxima lição)\n' if can_go_to_next_lesson else ''
             yield hint + u'\n(? para pedir ajuda)\n' \
                 + next_lesson_text \
                 + question
@@ -47,7 +47,7 @@ def revise(input, kourse, knowledge_base):
                 continue
             elif util.normalize_caseless(tentative) == '+':
                 # next lesson
-                for x in add_lesson(input, kourse, knowledge_base):
+                for x in add_lesson(input, course, knowledge_base):
                     yield x
                 kbis = knowledge_base.get_kbis_to_revise()
                 continue
@@ -64,25 +64,25 @@ def revise(input, kourse, knowledge_base):
         del kbis[kbi_idx]
         kbis.add(kbi)
 
-def get_next_unknown_kesson(kodule, knowledge_base):
-    for dep in kodule.dependencies:
-        kod, kess = get_next_unknown_kesson(dep, knowledge_base)
+def get_next_unknown_lesson(module, knowledge_base):
+    for dep in module.dependencies:
+        kod, kess = get_next_unknown_lesson(dep, knowledge_base)
         if kess is not None:
             return kod, kess
-    for kesson in kodule.kessons:
-        kesson_pathname = os.path.join(kodule.pathname, kesson.title)
-        if not knowledge_base.has_kesson(kesson_pathname):
-            return kodule, kesson
+    for lesson in module.lessons:
+        lesson_pathname = os.path.join(module.pathname, lesson.title)
+        if not knowledge_base.has_lesson(lesson_pathname):
+            return module, lesson
     return None, None
 
-def add_lesson(input, kodule, knowledge_base):
-    kodule, kesson = get_next_unknown_kesson(kodule, knowledge_base)
-    if kesson is None:
+def add_lesson(input, module, knowledge_base):
+    module, lesson = get_next_unknown_lesson(module, knowledge_base)
+    if lesson is None:
         return
-    output = u'A próxima lição do módulo "' + kodule.title + u'", é "' + kesson.title + '"\n'
-    if len(kesson.initial_material) > 0:
+    output = u'A próxima lição do módulo "' + module.title + u'", é "' + lesson.title + '"\n'
+    if len(lesson.initial_material) > 0:
         output += u'Material inicial:\n'
-        for im in kesson.initial_material:
+        for im in lesson.initial_material:
             output += '    ' + im + '\n'
     else:
         output = u'Não há material inicial para esta lição.\n'
@@ -94,5 +94,5 @@ def add_lesson(input, kodule, knowledge_base):
     if util.normalize_caseless(input.value) == 'revisar':
         return
     skip = (util.normalize_caseless(input.value) == 'pular')
-    kesson_pathname = os.path.join(kodule.pathname, kesson.title)
-    knowledge_base.add_kesson(kesson, kesson_pathname, skip)
+    lesson_pathname = os.path.join(module.pathname, lesson.title)
+    knowledge_base.add_lesson(lesson, lesson_pathname, skip)

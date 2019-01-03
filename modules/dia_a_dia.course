@@ -2,8 +2,8 @@ Curso de exemplo para professores // The first line is the course's title
 // This is a comment, ignored by the app
 // This first block has no material, only title and references to prerequisites
 // Use references (@) to include other modules into yours
-@cumprimentar.kodule
-@pronomes_singulares.kodule
+@cumprimentar.module
+@pronomes_singulares.module
 // use a blank line for a new lesson
 ? Este curso de francês para brasileiros vai introduzir palavras, frases e regras de gramática
 ? aos poucos. A cada frase em português proposta, responda com a tradução.

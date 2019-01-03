@@ -9,7 +9,7 @@ import sys
 
 import util
 import study
-import kodule
+import module
 import kb
 
 reload(sys)  
@@ -58,37 +58,37 @@ class Session:
         global input
         while True:
             try:
-                # choose kourse
+                # choose course
                 while True:
                     i=1
                     output = u'Cursos disponíveis:\n\n'
-                    for k in kodule.all_kourses:
+                    for k in module.all_courses:
                         output = output + str(i)+'. ' + k.title + '\n'
                         i += 1
                     yield output + u"\nO que quer estudar? Digite o número do curso."
                     if not input.value.isdigit():
                         continue
                     selected_item = int(input.value) - 1
-                    if selected_item < 0 or selected_item >= len(kodule.all_kourses):
+                    if selected_item < 0 or selected_item >= len(module.all_courses):
                         continue
                     break
-                # study kourse
+                # study course
                 output = ''
-                kourse = kodule.all_kourses[selected_item]
-                if kourse.pathname not in self.kbs:
-                    yield kourse.title + u':\n' \
-                        + u' '.join(kourse.initial_material) \
+                course = module.all_courses[selected_item]
+                if course.pathname not in self.kbs:
+                    yield course.title + u':\n' \
+                        + u' '.join(course.initial_material) \
                         + u'\n\n' \
                         + u'Envie "ok" para começar o curso ou "não" para voltar para a escolha do curso.'
                     if util.normalize_caseless(input.value) != 'ok':
                         continue
-                    self.kbs[kourse.pathname] = kb.KnowledgeBase() # TODO load from file/DB
-                    for x in study.add_lesson(input, kourse, self.kbs[kourse.pathname]):
+                    self.kbs[course.pathname] = kb.KnowledgeBase() # TODO load from file/DB
+                    for x in study.add_lesson(input, course, self.kbs[course.pathname]):
                         yield x
                 else:
                     output += u'Vamos continuar!\n\n'
 
-                for x in study.revise(input, kourse, self.kbs[kourse.pathname]):
+                for x in study.revise(input, course, self.kbs[course.pathname]):
                     yield output + x
                     output = u''
                     if input.value == '!':
