@@ -134,7 +134,7 @@ def add_lesson(input, module, knowledge_base):
     else:
         output = u'Não há material inicial para esta lição.\n'
     output += u'\n'\
-        + u'Se preferir continuar revisando por mais uma hora, digite "revisar".\n'\
+        + u'Se preferir continuar revisando, digite "revisar".\n'\
         + u'Se já tiver domínio do material, digite "pular".\n'\
         + u'Se quiser estudar esta lição, digite "ok" ou qualquer outra coisa.'
     yield output
