@@ -18,7 +18,6 @@ Comer frutas
 ? pera: poire
 ? maçã: pomme
 ? melancia: pastèque
-comer    -> manger          #verbo #comer #infinitivo
 fruta    -> un fruit        #fruta #comida
 pera     -> une poire       #fruta #comida
 maçã     -> une pomme       #fruta #comida
@@ -31,7 +30,7 @@ Beber, conjugação
 ? você bebe: tu bois
 ? ele bebe: il boit
 ? ela bebe: elle boit
-beber     -> boire
+beber     -> boire      #verbo #beber #infinitivo
 eu bebo   -> je bois    #verbo #beber #pluralidade=singular #pessoa=1a
 você bebe -> tu bois    #verbo #beber #pluralidade=singular #pessoa=2a
 ele bebe  -> il boit    #verbo #beber #pluralidade=singular #pessoa=3a
@@ -43,9 +42,8 @@ Beber
 ? café: café
 ? suco de fruta: jus de fruit
 ? chá: thé
-beber: boire   #vebo #beber #infinitivo
-água: de l'eau    #bebida
-café: du café     #bebida
-suco de fruta: du jus de fruit #bebida
-chá: du thé       #bebida
+água          -> de l'eau        #bebida
+café          -> du café         #bebida
+suco de fruta -> du jus de fruit #bebida
+chá           -> du thé          #bebida
 [@pronome@pl=pluralidade@pe=pessoa] [@verbo@beber@pluralidade=pl@pessoa=pe] [@bebida] -> [0] [1] [2]
