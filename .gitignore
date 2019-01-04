@@ -1,3 +1,6 @@
+# LanguageOrDie specific:
+modules/test.course
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
