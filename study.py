@@ -64,6 +64,53 @@ def revise(input, course, knowledge_base):
         del kbis[kbi_idx]
         kbis.add(kbi)
 
+def learn(input, course, knowledge_base, partial_knowledge_base):
+    kbis = partial_knowledge_base.get_kbis_to_revise()
+    if len(kbis) == 0:
+        return
+
+    while kbis[0].next_revision_datetime <= datetime.datetime.now():
+        # choose kbi
+        kbs_past_time_count = 0
+        while kbs_past_time_count<10 and kbs_past_time_count < len(kbis) and kbis[kbs_past_time_count].next_revision_datetime <= datetime.datetime.now()+datetime.timedelta(days=1):
+            kbs_past_time_count += 1
+        if kbs_past_time_count < 10:
+            kbi_idx = 0
+        else:
+            kbi_idx = random.randint(0, kbs_past_time_count-1)
+        kbi = kbis[kbi_idx]
+        # prepare question and acceptable answers
+        question, answers = knowledge_base.get_question_from_kbi(kbi)
+        if question is None: # invalid
+            del kbis[kbi_idx]
+            continue
+        # ask the question and check the answer
+        tries = 0
+        hint = ''
+        while True:
+            yield hint + u'\n(? para pedir ajuda)\n' \
+                + question
+            tentative = input.value
+            tries += 1
+            if util.normalize_caseless(tentative) == '?':
+                # help
+                hint = u'Tradução possível: ' + answers.get_possible_solution() + '\n'\
+                    + u'(! para sair do curso)\n'
+                continue
+            if answers.accept(tentative):
+                break
+            hint = u'Resposta errada\n'
+            continue
+        # update knowledge base
+        for kbi_involved in answers.kbis_involved:
+            kbi_advancement = 0
+            if tries == 1 and kbi_involved.next_revision_datetime <= datetime.datetime.now():
+                kbi_advancement = 1
+            kbi_involved.consolidate(kbi_advancement)
+        del kbis[kbi_idx]
+        kbis.add(kbi)
+
+
 def get_next_unknown_lesson(module, knowledge_base):
     for dep in module.dependencies:
         kod, kess = get_next_unknown_lesson(dep, knowledge_base)
@@ -95,4 +142,9 @@ def add_lesson(input, module, knowledge_base):
         return
     skip = (util.normalize_caseless(input.value) == 'pular')
     lesson_pathname = os.path.join(module.pathname, lesson.title)
-    knowledge_base.add_lesson(lesson, lesson_pathname, skip)
+    partial_knowledge_base = kb.KnowledgeBase()
+    partial_knowledge_base.add_lesson(lesson, lesson_pathname, skip)
+    if not skip:
+        for x in learn(input, module, knowledge_base, partial_knowledge_base):
+            yield x
+    knowledge_base.incorporate(partial_knowledge_base)

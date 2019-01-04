@@ -145,6 +145,11 @@ class KnowledgeBase:
                     kbi.consolidate(10)
                 self.knowledge_items.add(kbi)
 
+    def incorporate(self, other):
+        self.lessons_pathnames = self.lessons_pathnames.union(other.lessons_pathnames)
+        self.knowledge_items.update(other.knowledge_items)
+        self.hidden_knowledge_items += other.hidden_knowledge_items
+
     def get_kbis_to_revise(self):
         return self.knowledge_items
 
