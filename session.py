@@ -66,9 +66,9 @@ class Session:
                         output = output + str(i)+'. ' + k.title + '\n'
                         i += 1
                     yield output + u"\nO que quer estudar? Digite o número do curso."
-                    if not input.value.isdigit():
+                    if not isinstance(input.value, int):
                         continue
-                    selected_item = int(input.value) - 1
+                    selected_item = input.value - 1
                     if selected_item < 0 or selected_item >= len(module.all_courses):
                         continue
                     break
@@ -79,19 +79,26 @@ class Session:
                     yield course.title + u':\n' \
                         + u' '.join(course.initial_material) \
                         + u'\n\n' \
-                        + u'Envie "ok" para começar o curso ou "não" para voltar para a escolha do curso.'
-                    if util.normalize_caseless(input.value) != 'ok':
+                        + u'1. Começar esse curso\n'\
+                        + u'2. Voltar para a escolha do curso.'
+                    if not isinstance(input.value, int):
                         continue
-                    self.kbs[course.pathname] = kb.KnowledgeBase() # TODO load from file/DB
-                    for x in study.add_lesson(input, course, self.kbs[course.pathname]):
+                    if input.value != 1:
+                        continue
+                    knowledge_base = kb.KnowledgeBase() # TODO load from file/DB
+                    for x in study.add_lesson(input, course, knowledge_base, can_revise=False):
                         yield x
+                    if len(knowledge_base.knowledge_items) > 0:
+                        self.kbs[course.pathname] = knowledge_base
+                    else:
+                        continue
                 else:
                     output += u'Vamos continuar!\n\n'
 
                 for x in study.revise(input, course, self.kbs[course.pathname]):
                     yield output + x
                     output = u''
-                    if input.value == '!':
+                    if isinstance(input.value, int) and input.value == 1:
                         break
 
             except Exception, e:

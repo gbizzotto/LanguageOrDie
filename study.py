@@ -34,23 +34,26 @@ def revise(input, course, knowledge_base):
         tries = 0
         hint = ''
         while True:
-            next_lesson_text = u'(+ para ir para a próxima lição)\n' if can_go_to_next_lesson else ''
-            yield hint + u'\n(? para pedir ajuda)\n' \
+            next_lesson_text = u'\n3. Próxima lição' if can_go_to_next_lesson else ''
+            yield hint\
+                + u'\n1. Sair do curso' \
+                + u'\n2. Pedir ajuda' \
                 + next_lesson_text \
+                + '\n\n' \
                 + question
+            if isinstance(input.value, int):
+                if input.value == 2:
+                    # help
+                    hint = u'Tradução possível: ' + answers.get_possible_solution() + '\n'
+                    continue
+                if input.value == 3 and len(next_lesson_text) > 0:
+                    # next lesson
+                    for x in add_lesson(input, course, knowledge_base):
+                        yield x
+                    kbis = knowledge_base.get_kbis_to_revise()
+                    continue
             tentative = input.value
             tries += 1
-            if util.normalize_caseless(tentative) == '?':
-                # help
-                hint = u'Tradução possível: ' + answers.get_possible_solution() + '\n'\
-                    + u'(! para sair do curso)\n'
-                continue
-            elif util.normalize_caseless(tentative) == '+':
-                # next lesson
-                for x in add_lesson(input, course, knowledge_base):
-                    yield x
-                kbis = knowledge_base.get_kbis_to_revise()
-                continue
             if answers.accept(tentative):
                 break
             hint = u'Resposta errada\n'
@@ -88,15 +91,18 @@ def learn(input, course, knowledge_base, partial_knowledge_base):
         tries = 0
         hint = ''
         while True:
-            yield hint + u'\n(? para pedir ajuda)\n' \
+            yield hint\
+                + u'\n1. Sair do curso' \
+                + u'\n2. Pedir ajuda' \
+                + '\n\n' \
                 + question
+            if isinstance(input.value, int):
+                if input.value == 2:
+                    # help
+                    hint = u'Tradução possível: ' + answers.get_possible_solution() + '\n'
+                    continue
             tentative = input.value
             tries += 1
-            if util.normalize_caseless(tentative) == '?':
-                # help
-                hint = u'Tradução possível: ' + answers.get_possible_solution() + '\n'\
-                    + u'(! para sair do curso)\n'
-                continue
             if answers.accept(tentative):
                 break
             hint = u'Resposta errada\n'
@@ -122,7 +128,7 @@ def get_next_unknown_lesson(module, knowledge_base):
             return module, lesson
     return None, None
 
-def add_lesson(input, module, knowledge_base):
+def add_lesson(input, module, knowledge_base, can_revise=True):
     module, lesson = get_next_unknown_lesson(module, knowledge_base)
     if lesson is None:
         return
@@ -133,18 +139,22 @@ def add_lesson(input, module, knowledge_base):
             output += '    ' + im + '\n'
     else:
         output = u'Não há material inicial para esta lição.\n'
-    output += u'\n'\
-        + u'Se preferir continuar revisando, digite "revisar".\n'\
-        + u'Se já tiver domínio do material, digite "pular".\n'\
-        + u'Se quiser estudar esta lição, digite "ok" ou qualquer outra coisa.'
+    output += u'\n1. Sair do curso'\
+        + u'\n2. Estudar essa lição'\
+        + u'\n3. Pular (já tenho domínio do material)'
+    if can_revise:
+        output += u'\n4. Continuar revisando'
     yield output
-    if util.normalize_caseless(input.value) == 'revisar':
-        return
-    skip = (util.normalize_caseless(input.value) == 'pular')
+    if isinstance(input.value, int):
+        skip = input.value == 3
+        if input.value in [1,4]:
+            return
     lesson_pathname = os.path.join(module.pathname, lesson.title)
     partial_knowledge_base = kb.KnowledgeBase()
     partial_knowledge_base.add_lesson(lesson, lesson_pathname, skip)
     if not skip:
         for x in learn(input, module, knowledge_base, partial_knowledge_base):
             yield x
+            if isinstance(input.value, int) and input.value == 1:
+                return
     knowledge_base.incorporate(partial_knowledge_base)

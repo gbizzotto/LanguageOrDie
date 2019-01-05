@@ -19,6 +19,7 @@ except:
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineQueryResultArticle, InputTextMessageContent
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 
 import telegrambot
 import session
@@ -43,7 +44,10 @@ def telegram_bot_handle(msg):
     if session_id not in session.sessions:
         session.sessions[session_id] = session.Session()
         output = session.Session.intro
-    session.input.value = msg['text']
+    if util.starts_with_number_and_dot(msg['text']):
+        session.input.value = util.starts_with_number_and_dot(msg['text'])
+    else:
+        session.input.value = msg['text']
     session.sessions[session_id].lock.acquire()
     try:
         output += session.sessions[session_id].generator.next()
@@ -55,7 +59,15 @@ def telegram_bot_handle(msg):
     for line in output.split('\n'):
         util.log(msg['from']['first_name'], '<-', line)
     if len(output) != 0:
-        bot.sendMessage(chat_id, output)
+        keyboard = []
+        for line in output.split('\n'):
+            if util.starts_with_number_and_dot(line):
+                keyboard.append([line])
+        # keyboard= [\
+        #         ["alpha", "beta"],\
+        #         ["gamma"]\
+        #     ]
+        bot.sendMessage(chat_id, output, reply_markup=ReplyKeyboardMarkup(keyboard=keyboard, one_time_keyboard=True, resize_keyboard=True))
     else:
         util.log("Bot would have sent an empty message.")
 
