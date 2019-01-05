@@ -63,11 +63,8 @@ def telegram_bot_handle(msg):
         for line in output.split('\n'):
             if util.starts_with_number_and_dot(line):
                 keyboard.append([line])
-        # keyboard= [\
-        #         ["alpha", "beta"],\
-        #         ["gamma"]\
-        #     ]
         bot.sendMessage(chat_id, output, reply_markup=ReplyKeyboardMarkup(keyboard=keyboard, one_time_keyboard=True, resize_keyboard=True))
+        bot.sendVoice(chat_id, 'https://upload.wikimedia.org/wikipedia/commons/4/4d/Haydn_StringQuartetInDMajorOp.64_JosephHaydn-StringQuartetInDOp.645H363Lark-04-FinaleVivace.ogg', "Transcript that shit bitch!")
     else:
         util.log("Bot would have sent an empty message.")
 
