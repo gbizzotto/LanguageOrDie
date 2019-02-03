@@ -1,29 +1,50 @@
 Verbos
+@gabs-courses/pt-fr/pronomes_1.module
 
-Básicos
+Être
+? O verbo 'être' (ser, estar) e suas conjugações, em conjunto, são as palavras mais usadas do idioma francês.
 ? Em francês a distinção entre ser e estar é deduzida pelo contexto.
 ? Só existe o verbo 'être'.
 ? Diferente do português, do espanhol e do mandarim, onde há verbos distintos para ser e estar,
 ? Tudo é feito com 'être' em francês, bem como em inglês.
+? Resumindo, ser e estar viram être
 ser   -> être  #verbo #infinitivo #ser
 estar -> être  #verbo #infinitivo #estar
-* sou -> suis  #verbo #conjudago #pluralidade=singular #pessoa=1a #ser
-* é   -> es    #verbo #conjudago #pluralidade=singular #pessoa=2a #ser
-* é   -> est   #verbo #conjudago #pluralidade=singular #pessoa=3a #ser
-* estou -> suis  #verbo #conjudago #pluralidade=singular #pessoa=1a #estar
-* está  -> es    #verbo #conjudago #pluralidade=singular #pessoa=2a #estar
-* está  -> est   #verbo #conjudago #pluralidade=singular #pessoa=3a #estar
 
 Ser
 ? Vamos conjugar 'être' como se fosse 'ser'
+? sou ou eu sou: je suis
+? é ou você é: tu es
+? é (masculino) ou ele é: il est
+? é (feminino) ou ela é: elle est
+* sou -> suis  #verbo #conjugado #pluralidade=singular #pessoa=1a #ser
+* é   -> es    #verbo #conjugado #pluralidade=singular #pessoa=2a #ser
+* é   -> est   #verbo #conjugado #pluralidade=singular #pessoa=3a #ser
 eu sou  -> je suis
 você é  -> tu es
-ele é   -> il est
-ela é   -> elle est
+[@pronome @pluralidade='singular' @pessoa='3a'] é -> [0] est
 
 Estar
 ? Vamos conjugar 'être' como se fosse 'estar'
+? estou ou eu estou: je suis
+? está ou você está: tu es
+? está (masculino) ou ele está: il est
+? está (feminino) ou ela está: elle est
+* estou -> suis  #verbo #conjugado #pluralidade=singular #pessoa=1a #estar
+* está -> es     #verbo #conjugado #pluralidade=singular #pessoa=2a #estar
+* está -> est    #verbo #conjugado #pluralidade=singular #pessoa=3a #estar
 eu estou  -> je suis
 você está -> tu es
-ele está  -> il est
-ela está  -> elle est
+[@pronome @pluralidade='singular' @pessoa='3a'] está -> [0] est
+
+Avoir
+? O verbo 'avoir' (ter), e suas conjugações são, em conjunto, as segundas palavras mais usados do idioma, depois de être.
+? eu tenho: j'ai (o "je ai", como é de prática quando um pronome ou artigo que termina com uma vogal seguido de um verbo que começa com vogal, são abreviados, trocando a última vogal do pronome ou artigo por um apóstrofe, e removendo o espaço)
+? você tem, tu tens: tu as (aqui, a mesma regra pode ser aplicada para produzir "t'as", mas é colloquial e errado na escrita)
+? ele/ela tem: il/elle a
+* tenho -> ai     #verbo #conjugado #pluralidade=singular #pessoa=1a #ter
+* tem|tens -> as  #verbo #conjugado #pluralidade=singular #pessoa=2a #ter
+* tem -> a        #verbo #conjugado #pluralidade=singular #pessoa=3a #ter
+eu tenho -> j'ai
+você tem -> tu as
+[@pronome @pluralidade='singular' @pessoa='3a'] tem -> [0] a
