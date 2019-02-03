@@ -77,6 +77,8 @@ def console_main():
     for x in sess.generator:
         output += x
         session.input.value = raw_input(output + u' > ').decode(sys.stdin.encoding)
+        if session.input.value.isdigit():
+            session.input.value = int(session.input.value)
         output = ''
 
 def telegram_bot_main():    

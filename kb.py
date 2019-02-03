@@ -20,7 +20,8 @@ class Answers:
     def match(str, sequence):
         for possibilities in sequence:
             for possibility in possibilities:
-                if str.startswith(util.normalize_caseless(possibility)):
+                possibility = util.normalize_caseless(possibility)
+                if str.startswith(possibility):
                     if Answers.match(str[len(possibility):], sequence[1:]):
                         return True
         return len(sequence) == 0 and len(str) == 0
